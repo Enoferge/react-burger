@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import cssModulesPlugin from 'eslint-plugin-css-modules';
 import importPlugin from 'eslint-plugin-import';
 import perfectionist from 'eslint-plugin-perfectionist';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -37,7 +38,6 @@ export default tseslint.config(
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
-        project: './tsconfig.json',
         projectService: true,
         sourceType: 'module',
         tsconfigRootDir: import.meta.dirname,
@@ -46,6 +46,7 @@ export default tseslint.config(
       globals: globals.browser,
     },
     plugins: {
+      'css-modules': cssModulesPlugin,
       perfectionist,
       react,
       'react-refresh': reactRefresh,
@@ -84,6 +85,8 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
+      'css-modules/no-undef-class': 'error',
+      'css-modules/no-unused-class': 'warn',
       'import/no-unresolved': 'error',
       'import/no-unused-modules': 'error',
       'import/order': 'off',
@@ -133,13 +136,17 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'off'
     },
     settings: {
+      'css-modules': {
+        camelCase: 'true',
+        filetypes: {
+          '.css': 'postcss',
+          '.module.css': 'postcss',
+        },
+      },
       react: {
         version: 'detect',
       },
       'import/resolver': {
-        node: {
-          extensions: ['.ts', '.tsx', '.js', '.jsx', '.d.ts'],
-        },
         typescript: {
           alwaysTryTypes: true,
           project: './tsconfig.json',
