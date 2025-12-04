@@ -1,7 +1,8 @@
+import { useTabScroll } from '@/hooks/use-tab-scroll';
 import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 
 import { BurgerIngredientsSection } from './burger-ingredients-section/burger-ingredients-section';
 
@@ -26,27 +27,9 @@ export const BurgerIngredients = ({
     );
   }, [ingredients]);
 
-  const [activeTab, setActiveTab] = useState<TIngredientType>('bun');
-  const sectionRefs = useRef<Map<TIngredientType, HTMLDivElement>>(new Map());
-
-  const setSectionRef = (
-    type: TIngredientType,
-    element: HTMLDivElement | null
-  ): void => {
-    if (element) {
-      sectionRefs.current.set(type, element);
-    } else {
-      sectionRefs.current.delete(type);
-    }
-  };
-
-  const handleTabClick = (type: TIngredientType): void => {
-    setActiveTab(type);
-    const sectionElement = sectionRefs.current.get(type);
-    if (sectionElement) {
-      sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const { activeTab, setSectionRef, handleTabClick } = useTabScroll<TIngredientType>({
+    initialActiveTab: 'bun',
+  });
 
   return (
     <section className={styles.burger_ingredients}>
