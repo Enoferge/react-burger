@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import { BurgerIngredientsItem } from '../burger-ingredients-item/burger-ingredients-item';
 
 import type { TIngredient } from '@/utils/types';
@@ -9,12 +11,12 @@ export type TBurgerIngredientsSectionProps = {
   ingredients: TIngredient[];
 };
 
-export const BurgerIngredientsSection = ({
-  title,
-  ingredients,
-}: TBurgerIngredientsSectionProps): React.JSX.Element => {
+const BurgerIngredientsSection = forwardRef<
+  HTMLDivElement,
+  TBurgerIngredientsSectionProps
+>(({ title, ingredients }, ref): React.JSX.Element => {
   return (
-    <div className={styles.section}>
+    <div className={styles.section} ref={ref}>
       <h2 className="text text_type_main-medium">{title}</h2>
       <ul className={styles.list}>
         {ingredients.map((ingredient) => (
@@ -25,4 +27,8 @@ export const BurgerIngredientsSection = ({
       </ul>
     </div>
   );
-};
+});
+
+BurgerIngredientsSection.displayName = 'BurgerIngredientsSection';
+
+export { BurgerIngredientsSection };
