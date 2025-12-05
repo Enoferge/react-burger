@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import type { TIngredient } from '@/utils/types';
 import type { ReactNode } from 'react';
@@ -8,20 +8,51 @@ export type TOrder = Record<TIngredient['_id'], number>;
 
 type TOrderContextValue = {
   order: TOrder;
+  setOrder: (order: TOrder) => void;
+  addIngredient: (ingredientId: TIngredient['_id']) => void;
+  removeIngredient: (ingredientId: TIngredient['_id']) => void;
 };
 
 type TOrderProviderProps = {
   children: ReactNode;
-  order: TOrder;
 };
 
 const OrderContext = createContext<TOrderContextValue | undefined>(undefined);
 
 export const OrderProvider = ({
   children,
-  order,
+  // order,
 }: TOrderProviderProps): React.JSX.Element => {
-  return <OrderContext.Provider value={{ order }}>{children}</OrderContext.Provider>;
+  const [order, setOrder] = useState<TOrder>({});
+
+  const addIngredient = (ingredientId: TIngredient['_id']): void => {
+    setOrder((prev) => ({
+      ...prev,
+      [ingredientId]: (prev?.[ingredientId] ?? 0) + 1,
+    }));
+  };
+
+  const removeIngredient = (ingredientId: TIngredient['_id']): void => {
+    setOrder((prev) => {
+      const updatedOrder = { ...prev };
+
+      if (updatedOrder[ingredientId] > 1) {
+        updatedOrder[ingredientId] -= 1;
+      } else {
+        delete updatedOrder[ingredientId];
+      }
+      return updatedOrder;
+    });
+  };
+
+  const value = {
+    order,
+    setOrder,
+    addIngredient,
+    removeIngredient,
+  };
+
+  return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;
 };
 
 export const useOrder = (): TOrderContextValue => {

@@ -2,6 +2,7 @@ import { Price } from '@/components/price/price';
 import { useOrder } from '@/contexts/order-context';
 import { useOrderIngredients } from '@/hooks/use-order-ingredients';
 import { Button } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect } from 'react';
 
 import { BurgerConstructorItem } from './burger-constuctor-item/burger-constructor-item';
 
@@ -11,6 +12,8 @@ import styles from './burger-constructor.module.css';
 
 type TBurgerConstructorProps = {
   ingredients: TIngredient[];
+  isOrderCreating?: boolean;
+  onCreateOrder: () => Promise<void>;
 };
 
 // TODO: remove
@@ -20,8 +23,24 @@ const noop = (): void => {
 
 export const BurgerConstructor = ({
   ingredients,
+  isOrderCreating,
+  onCreateOrder,
 }: TBurgerConstructorProps): React.JSX.Element => {
-  const { order } = useOrder();
+  const { order, setOrder } = useOrder();
+
+  // пока просто сестим заказ
+  useEffect(() => {
+    setOrder({
+      '60666c42cc7b410027a1a9b1': 1,
+      '60666c42cc7b410027a1a9b5': 2,
+      '60666c42cc7b410027a1a9b6': 1,
+      '60666c42cc7b410027a1a9b7': 1,
+      '60666c42cc7b410027a1a9bc': 1,
+      '60666c42cc7b410027a1a9b10': 1,
+      '60666c42cc7b410027a1a9b9': 1,
+    });
+  }, []);
+
   const { totalPrice, innerIngredients, bunIngredient } = useOrderIngredients({
     ingredients,
     order,
@@ -61,7 +80,15 @@ export const BurgerConstructor = ({
       </div>
       <div className={styles.footer}>
         <Price price={totalPrice} size="M" />
-        <Button htmlType="button" type="primary" size="medium">
+        <Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          disabled={isOrderCreating}
+          onClick={() => {
+            void onCreateOrder();
+          }}
+        >
           Оформить заказ
         </Button>
       </div>

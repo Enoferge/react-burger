@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.image {
+  margin: calc(var(--offset-base-size) * 15) 0;
+}
