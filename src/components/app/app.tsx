@@ -9,7 +9,13 @@ import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
   const order: TOrder = {
-    '60666c42cc7b410027a1a9b1': 2,
+    '60666c42cc7b410027a1a9b1': 1,
+    '60666c42cc7b410027a1a9b5': 2,
+    '60666c42cc7b410027a1a9b6': 1,
+    '60666c42cc7b410027a1a9b7': 1,
+    '60666c42cc7b410027a1a9bc': 1,
+    '60666c42cc7b410027a1a9b10': 1,
+    '60666c42cc7b410027a1a9b9': 1,
   };
 
   return (

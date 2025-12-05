@@ -6,7 +6,7 @@ import type { TIngredient } from '@/utils/types';
 
 import styles from './burger-ingredients-section.module.css';
 
-export type TBurgerIngredientsSectionProps = {
+type TBurgerIngredientsSectionProps = {
   title: string;
   ingredients: TIngredient[];
 };

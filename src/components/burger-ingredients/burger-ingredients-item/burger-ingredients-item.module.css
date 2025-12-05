@@ -17,13 +17,6 @@
   margin: 0 calc(var(--offset-base-size) * 4);
 }
 
-.price {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: calc(var(--offset-base-size) * 2);
-}
-
 .counter {
   position: absolute;
   top: 0;

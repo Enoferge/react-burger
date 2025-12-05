@@ -1,5 +1,6 @@
+import { Price } from '@/components/price/price';
 import { useIngredientCount } from '@/contexts/order-context';
-import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
+import { Counter } from '@krgaa/react-developer-burger-ui-components';
 
 import type { TIngredient } from '@/utils/types';
 
@@ -17,14 +18,9 @@ export const BurgerIngredientsItem = ({
   return (
     <div className={styles.wrapper}>
       <img className={styles.image} src={ingredient.image} alt={ingredient.name} />
-      <div className={styles.price}>
-        {ingredient.price}
-        <CurrencyIcon type="primary" />
-      </div>
+      <Price price={ingredient.price} />
       <span className="text text_type_main-default">{ingredient.name}</span>
-      {count ? (
-        <Counter count={count} size="default" extraClass={styles.counter} />
-      ) : null}
+      {count > 0 && <Counter count={count} size="default" extraClass={styles.counter} />}
     </div>
   );
 };
