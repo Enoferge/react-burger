@@ -27,7 +27,7 @@ export const BurgerConstructor = ({
 }: TBurgerConstructorProps): React.JSX.Element => {
   const { order, setOrder } = useOrder();
 
-  // пока просто сестим заказ
+  // пока просто сетим заказ
   useEffect(() => {
     setOrder({
       '60666c42cc7b410027a1a9b1': 1,

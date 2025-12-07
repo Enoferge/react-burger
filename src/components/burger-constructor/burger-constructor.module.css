@@ -22,7 +22,6 @@
 
 .scrollable_area {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   gap: calc(var(--offset-base-size) * 4);
   min-height: 0;
