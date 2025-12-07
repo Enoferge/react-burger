@@ -51,15 +51,15 @@ export const BurgerConstructor = ({
   });
 
   return (
-    <section className={styles.wrapper}>
-      <div className={styles.ingredients}>
+    <section className={`${styles.wrapper} pb-3`}>
+      <div className={`${styles.ingredients} p-0 m-0`}>
         {bunIngredient ? (
           <>
             <BurgerConstructorItem
               ingredient={bunIngredient}
               elementProps={{ type: 'top', isLocked: true, handleClose: noop }}
             />
-            <ul className={styles.scrollable_area}>
+            <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
               {innerIngredients.map((ingredient, index) => (
                 <li key={`${ingredient._id}-${index}`}>
                   <BurgerConstructorItem
@@ -75,14 +75,14 @@ export const BurgerConstructor = ({
             />
           </>
         ) : (
-          <div className={styles.empty_state}>
+          <div className={`${styles.empty_state} p-10`}>
             <p className="text text_type_main-default text_color_inactive">
               Выберите булку и ингредиенты для бургера
             </p>
           </div>
         )}
       </div>
-      <div className={styles.footer}>
+      <div className={`${styles.footer} pl-4 pr-4 pt-10 pb-10`}>
         <Price price={totalPrice} size="M" />
         <Button
           htmlType="button"

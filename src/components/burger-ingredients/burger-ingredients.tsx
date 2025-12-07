@@ -44,7 +44,7 @@ export const BurgerIngredients = ({
   return (
     <section className={styles.burger_ingredients}>
       <nav>
-        <ul className={styles.menu}>
+        <ul className={`${styles.menu} p-0 m-0`}>
           {typedObjectEntries(IngredientTypeNames).map(([type, name]) => (
             <Tab
               key={type}
@@ -59,7 +59,7 @@ export const BurgerIngredients = ({
           ))}
         </ul>
       </nav>
-      <div className={styles.sections_wrapper}>
+      <div className={`${styles.sections_wrapper} mt-10 mb-10`}>
         {typedObjectEntries(preparedIngredients).map(([type, ingredients]) => (
           <BurgerIngredientsSection
             key={type}
@@ -71,7 +71,7 @@ export const BurgerIngredients = ({
         ))}
       </div>
       <Modal
-        isOpened={!!currentDetailedIngredient}
+        isOpen={!!currentDetailedIngredient}
         title="Детали ингредиента"
         onClose={(): void => setCurrentDetailedIngredient(undefined)}
       >

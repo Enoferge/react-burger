@@ -5,10 +5,8 @@
   z-index: 1000;
   box-sizing: border-box;
   min-width: 720px;
-  padding: calc(var(--offset-base-size) * 10);
-  padding-bottom: calc(var(--offset-base-size) * 15);
   background-color: var(--background);
-  border-radius: calc(var(--offset-base-size) * 4);
+  border-radius: var(--common-border-radius-s);
   box-shadow: 0 24px 32px 0 rgb(0 0 0 / 4%);
   transform: translate(-50%, -50%);
 }

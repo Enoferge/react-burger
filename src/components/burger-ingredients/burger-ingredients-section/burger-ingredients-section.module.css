@@ -8,5 +8,4 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: calc(var(--offset-base-size) * 6);
-  padding: 0 calc(var(--offset-base-size) * 4);
 }

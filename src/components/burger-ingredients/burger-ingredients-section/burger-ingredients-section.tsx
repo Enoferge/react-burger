@@ -19,7 +19,7 @@ const BurgerIngredientsSection = forwardRef<
   return (
     <div className={styles.section} ref={ref}>
       <h2 className="text text_type_main-medium">{title}</h2>
-      <ul className={styles.list}>
+      <ul className={`${styles.list} pl-4 pr-4`}>
         {ingredients.map((ingredient) => (
           <li key={ingredient._id}>
             <BurgerIngredientsItem

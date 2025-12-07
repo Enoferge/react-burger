@@ -19,7 +19,11 @@ export const BurgerIngredientsItem = ({
 
   return (
     <div className={styles.wrapper} onClick={onItemClick}>
-      <img className={styles.image} src={ingredient.image} alt={ingredient.name} />
+      <img
+        className={`${styles.image} ml-4 mr-4`}
+        src={ingredient.image}
+        alt={ingredient.name}
+      />
       <Price price={ingredient.price} />
       <span className="text text_type_main-default">{ingredient.name}</span>
       {count > 0 && <Counter count={count} size="default" extraClass={styles.counter} />}

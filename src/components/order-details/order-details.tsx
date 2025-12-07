@@ -12,7 +12,7 @@ export const OrderDetails = ({ id }: TOrderDetailsProps): React.JSX.Element => {
       <span className={'text text_type_digits-large'}>{id ?? '??????'}</span>
       <span className={'text text_type_main-medium mt-8'}>идентификатор заказа</span>
       <img
-        className={`${styles.image} mt-15 mb-15`}
+        className={'mt-15 mb-15'}
         alt="Заказ успешно создан"
         src={orderDetailsImage}
       />
