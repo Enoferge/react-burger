@@ -104,12 +104,11 @@ export const BurgerConstructor = ({
           Оформить заказ
         </Button>
       </div>
-      <Modal
-        isOpen={isOrderDetailsModalOpened}
-        onClose={(): void => setIsOrderDetailsModalOpened(false)}
-      >
-        <OrderDetails id={orderId} />
-      </Modal>
+      {isOrderDetailsModalOpened && (
+        <Modal onClose={(): void => setIsOrderDetailsModalOpened(false)}>
+          <OrderDetails id={orderId} />
+        </Modal>
+      )}
     </section>
   );
 };

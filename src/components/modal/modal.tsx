@@ -9,23 +9,17 @@ import styles from './modal.module.css';
 const modalRoot = document.getElementById('modals-root');
 
 type ModalProps = {
-  isOpen: boolean;
   title?: string;
   children: React.ReactNode;
   onClose: () => void;
 };
 
 export const Modal = ({
-  isOpen,
   title,
   children,
   onClose,
 }: ModalProps): React.JSX.Element | null => {
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
     const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         onClose();
@@ -35,9 +29,9 @@ export const Modal = ({
     document.addEventListener('keydown', handleEscape);
 
     return (): void => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [onClose]);
 
-  if (!modalRoot || !isOpen) {
+  if (!modalRoot) {
     return null;
   }
 

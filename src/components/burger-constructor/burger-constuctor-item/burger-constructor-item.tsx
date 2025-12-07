@@ -22,6 +22,14 @@ export const BurgerConstructorItem = ({
   ingredient,
   elementProps,
 }: TBurgerConstructorItemProps): React.JSX.Element => {
+  let text = ingredient.name;
+
+  if (elementProps.type === 'top') {
+    text = `${ingredient.name} (верх)`;
+  } else if (elementProps.type === 'bottom') {
+    text = `${ingredient.name} (низ)`;
+  }
+
   return (
     <div className={styles.wrapper}>
       <DragIcon
@@ -30,7 +38,7 @@ export const BurgerConstructorItem = ({
       />
       <ConstructorElement
         extraClass={styles.constructor_element}
-        text={ingredient.name}
+        text={text}
         price={ingredient.price}
         thumbnail={ingredient.image}
         {...elementProps}

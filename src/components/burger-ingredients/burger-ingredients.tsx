@@ -70,15 +70,16 @@ export const BurgerIngredients = ({
           />
         ))}
       </div>
-      <Modal
-        isOpen={!!currentDetailedIngredient}
-        title="Детали ингредиента"
-        onClose={(): void => setCurrentDetailedIngredient(undefined)}
-      >
-        {currentDetailedIngredient && (
-          <IngredientDetails ingredient={currentDetailedIngredient} />
-        )}
-      </Modal>
+      {!!currentDetailedIngredient && (
+        <Modal
+          title="Детали ингредиента"
+          onClose={(): void => setCurrentDetailedIngredient(undefined)}
+        >
+          {currentDetailedIngredient && (
+            <IngredientDetails ingredient={currentDetailedIngredient} />
+          )}
+        </Modal>
+      )}
     </section>
   );
 };
