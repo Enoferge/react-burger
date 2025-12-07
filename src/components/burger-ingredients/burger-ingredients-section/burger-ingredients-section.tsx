@@ -9,19 +9,23 @@ import styles from './burger-ingredients-section.module.css';
 type TBurgerIngredientsSectionProps = {
   title: string;
   ingredients: TIngredient[];
+  onIngredientClick: (ingredient: TIngredient) => void;
 };
 
 const BurgerIngredientsSection = forwardRef<
   HTMLDivElement,
   TBurgerIngredientsSectionProps
->(({ title, ingredients }, ref): React.JSX.Element => {
+>(({ title, ingredients, onIngredientClick }, ref): React.JSX.Element => {
   return (
     <div className={styles.section} ref={ref}>
       <h2 className="text text_type_main-medium">{title}</h2>
       <ul className={styles.list}>
         {ingredients.map((ingredient) => (
           <li key={ingredient._id}>
-            <BurgerIngredientsItem ingredient={ingredient} />
+            <BurgerIngredientsItem
+              ingredient={ingredient}
+              onItemClick={() => onIngredientClick(ingredient)}
+            />
           </li>
         ))}
       </ul>

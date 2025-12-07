@@ -2,8 +2,10 @@ import { useTabScroll } from '@/hooks/use-tab-scroll';
 import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { Modal } from '../modal/modal';
 import { BurgerIngredientsSection } from './burger-ingredients-section/burger-ingredients-section';
 
 import type { TIngredientType, TIngredient } from '@/utils/types';
@@ -31,6 +33,14 @@ export const BurgerIngredients = ({
     initialActiveTab: 'bun',
   });
 
+  const [currentDetailedIngredient, setCurrentDetailedIngredient] = useState<
+    TIngredient | undefined
+  >(undefined);
+
+  const handleIngredientClick = (ingredient: TIngredient): void => {
+    setCurrentDetailedIngredient(ingredient);
+  };
+
   return (
     <section className={styles.burger_ingredients}>
       <nav>
@@ -56,9 +66,19 @@ export const BurgerIngredients = ({
             ref={(el) => setSectionRef(type, el)}
             title={IngredientTypeNames[type]}
             ingredients={ingredients}
+            onIngredientClick={handleIngredientClick}
           />
         ))}
       </div>
+      <Modal
+        isOpened={!!currentDetailedIngredient}
+        title="Детали ингредиента"
+        onClose={(): void => setCurrentDetailedIngredient(undefined)}
+      >
+        {currentDetailedIngredient && (
+          <IngredientDetails ingredient={currentDetailedIngredient} />
+        )}
+      </Modal>
     </section>
   );
 };

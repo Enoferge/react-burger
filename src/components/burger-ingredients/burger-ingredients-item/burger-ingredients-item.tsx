@@ -8,15 +8,17 @@ import styles from './burger-ingredients-item.module.css';
 
 type TBurgerIngredientsItemProps = {
   ingredient: TIngredient;
+  onItemClick: () => void;
 };
 
 export const BurgerIngredientsItem = ({
   ingredient,
+  onItemClick,
 }: TBurgerIngredientsItemProps): React.JSX.Element => {
   const count = useIngredientCount(ingredient._id);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={onItemClick}>
       <img className={styles.image} src={ingredient.image} alt={ingredient.name} />
       <Price price={ingredient.price} />
       <span className="text text_type_main-default">{ingredient.name}</span>
