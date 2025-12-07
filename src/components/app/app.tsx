@@ -1,23 +1,13 @@
 import { OrderProvider } from '@/contexts/order-context';
-import { useCreateOrder } from '@/hooks/use-create-order';
-import { useState } from 'react';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
 import { ingredients } from '@utils/ingredients';
 
-import { Modal } from '../modal/modal';
-import { OrderDetails } from '../order-details/order-details';
-
 import styles from './app.module.css';
 
 const AppContent = (): React.JSX.Element => {
-  const [isOrderDetailsModalOpened, setIsOrderDetailsModalOpened] = useState(false);
-  const { orderId, handleCreateOrder, isOrderCreating } = useCreateOrder({
-    onCreationSuccess: () => setIsOrderDetailsModalOpened(true),
-  });
-
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -26,17 +16,7 @@ const AppContent = (): React.JSX.Element => {
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
         <BurgerIngredients ingredients={ingredients} />
-        <BurgerConstructor
-          ingredients={ingredients}
-          onCreateOrder={handleCreateOrder}
-          isOrderCreating={isOrderCreating}
-        />
-        <Modal
-          isOpened={isOrderDetailsModalOpened}
-          onClose={(): void => setIsOrderDetailsModalOpened(false)}
-        >
-          <OrderDetails id={orderId} />
-        </Modal>
+        <BurgerConstructor ingredients={ingredients} />
       </main>
     </div>
   );

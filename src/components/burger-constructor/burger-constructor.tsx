@@ -1,9 +1,12 @@
 import { Price } from '@/components/price/price';
 import { useOrder } from '@/contexts/order-context';
+import { useCreateOrder } from '@/hooks/use-create-order';
 import { useOrderIngredients } from '@/hooks/use-order-ingredients';
 import { Button } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+import { Modal } from '../modal/modal';
+import { OrderDetails } from '../order-details/order-details';
 import { BurgerConstructorItem } from './burger-constuctor-item/burger-constructor-item';
 
 import type { TIngredient } from '@utils/types';
@@ -12,8 +15,6 @@ import styles from './burger-constructor.module.css';
 
 type TBurgerConstructorProps = {
   ingredients: TIngredient[];
-  isOrderCreating?: boolean;
-  onCreateOrder: () => Promise<void>;
 };
 
 // TODO: remove
@@ -23,8 +24,6 @@ const noop = (): void => {
 
 export const BurgerConstructor = ({
   ingredients,
-  isOrderCreating,
-  onCreateOrder,
 }: TBurgerConstructorProps): React.JSX.Element => {
   const { order, setOrder } = useOrder();
 
@@ -44,6 +43,11 @@ export const BurgerConstructor = ({
   const { totalPrice, innerIngredients, bunIngredient } = useOrderIngredients({
     ingredients,
     order,
+  });
+
+  const [isOrderDetailsModalOpened, setIsOrderDetailsModalOpened] = useState(false);
+  const { orderId, handleCreateOrder, isOrderCreating } = useCreateOrder({
+    onCreationSuccess: () => setIsOrderDetailsModalOpened(true),
   });
 
   return (
@@ -86,12 +90,18 @@ export const BurgerConstructor = ({
           size="medium"
           disabled={isOrderCreating}
           onClick={() => {
-            void onCreateOrder();
+            void handleCreateOrder();
           }}
         >
           Оформить заказ
         </Button>
       </div>
+      <Modal
+        isOpen={isOrderDetailsModalOpened}
+        onClose={(): void => setIsOrderDetailsModalOpened(false)}
+      >
+        <OrderDetails id={orderId} />
+      </Modal>
     </section>
   );
 };
