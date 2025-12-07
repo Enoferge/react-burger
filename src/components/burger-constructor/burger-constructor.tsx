@@ -17,9 +17,9 @@ type TBurgerConstructorProps = {
   ingredients: TIngredient[];
 };
 
-// TODO: remove
-const noop = (): void => {
-  console.log('noop');
+// TODO: change in future
+const removeIngredient = (): void => {
+  console.log('removeIngredient');
 };
 
 export const BurgerConstructor = ({
@@ -57,21 +57,29 @@ export const BurgerConstructor = ({
           <>
             <BurgerConstructorItem
               ingredient={bunIngredient}
-              elementProps={{ type: 'top', isLocked: true, handleClose: noop }}
+              elementProps={{
+                type: 'top',
+                isLocked: true,
+                handleClose: removeIngredient,
+              }}
             />
             <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
               {innerIngredients.map((ingredient, index) => (
                 <li key={`${ingredient._id}-${index}`}>
                   <BurgerConstructorItem
                     ingredient={ingredient}
-                    elementProps={{ isLocked: false, handleClose: noop }}
+                    elementProps={{ isLocked: false, handleClose: removeIngredient }}
                   />
                 </li>
               ))}
             </ul>
             <BurgerConstructorItem
               ingredient={bunIngredient}
-              elementProps={{ type: 'bottom', isLocked: true, handleClose: noop }}
+              elementProps={{
+                type: 'bottom',
+                isLocked: true,
+                handleClose: removeIngredient,
+              }}
             />
           </>
         ) : (
