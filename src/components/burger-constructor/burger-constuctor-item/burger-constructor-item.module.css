@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--offset-base-size) * 2);
+}
+
+.drag_icon {
+  cursor: grab;
+}
+
+.drag_icon_hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.constructor_element {
+  background-color: var(--background);
+}

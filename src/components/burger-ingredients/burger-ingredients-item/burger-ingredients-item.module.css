@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--offset-base-size);
+  width: 272px;
+  min-height: 208px;
+  cursor: pointer;
+}
+
+.image {
+  width: 240px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

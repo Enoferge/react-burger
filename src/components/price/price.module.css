@@ -1,0 +1,17 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--offset-base-size) * 2);
+}
+
+.iconS {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.iconM {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+}
