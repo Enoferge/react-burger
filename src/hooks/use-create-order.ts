@@ -1,41 +1,52 @@
-import { useOrder, type TOrder } from '@/contexts/order-context';
-import { useState } from 'react';
+import { createOrderThunk } from '@/store/slices/order/actions';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import type { AppDispatch, RootState } from '@/store';
+import type { TOrderSliceState } from '@/store/slices/order/slice';
 
 type TUseCreateOrderProps = {
   onCreationSuccess: () => void;
 };
 
-type TUseCreateOrderResult = {
-  orderId?: number;
-  isOrderCreating?: boolean;
-  handleCreateOrder: () => Promise<void>;
+type TUseCreateOrderResult = TOrderSliceState & {
+  handleCreateOrder: () => void;
 };
 
 export const useCreateOrder = ({
   onCreationSuccess,
 }: TUseCreateOrderProps): TUseCreateOrderResult => {
-  const [orderId, setOrderId] = useState<number>();
-  const [isOrderCreating, setIsOrderCreating] = useState<boolean>();
-  const { order } = useOrder();
+  const dispatch = useDispatch<AppDispatch>();
+  const { ingredients, bun } = useSelector(
+    (state: RootState) => state.burgerConstructor
+  );
 
-  const createOrderRequest = async (_order: TOrder): Promise<number> => {
-    return new Promise((resolve) => setTimeout(() => resolve(123456), 500));
-  };
+  const { order, name, isCreating } = useSelector((state: RootState) => state.order);
 
-  const handleCreateOrder = async (): Promise<void> => {
-    try {
-      setIsOrderCreating(true);
-      const id = await createOrderRequest(order);
-      if (id) {
-        setOrderId(id);
-        onCreationSuccess();
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsOrderCreating(false);
+  const previousOrderNumberRef = useRef<number | null>(null);
+
+  const handleCreateOrder = (): void => {
+    if (!bun?._id) {
+      return;
     }
+
+    const preparedPayload = [bun?._id, ...ingredients.map(({ _id }) => _id), bun?._id];
+
+    void dispatch(createOrderThunk(preparedPayload));
   };
 
-  return { orderId, isOrderCreating, handleCreateOrder };
+  useEffect(() => {
+    const currentOrderNumber = order?.number ?? null;
+    const previousOrderNumber = previousOrderNumberRef.current;
+
+    if (
+      currentOrderNumber &&
+      !isCreating &&
+      currentOrderNumber !== previousOrderNumber
+    ) {
+      onCreationSuccess();
+    }
+  }, [order?.number, isCreating, onCreationSuccess]);
+
+  return { order, name, isCreating, handleCreateOrder };
 };

@@ -1,24 +1,31 @@
 import { useTabScroll } from '@/hooks/use-tab-scroll';
+import { addIngredient, setBun } from '@/store/slices/burger-constructor/slice';
+import {
+  setSelectedIngredient,
+  clearSelectedIngredient,
+} from '@/store/slices/selected-ingredient/slice';
 import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { BurgerIngredientsSection } from './burger-ingredients-section/burger-ingredients-section';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { TIngredientType, TIngredient } from '@/utils/types';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-};
+export const BurgerIngredients = (): React.JSX.Element => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { ingredients } = useSelector((state: RootState) => state.ingredients);
+  const { selectedIngredient } = useSelector(
+    (state: RootState) => state.selectedIngredient
+  );
 
-export const BurgerIngredients = ({
-  ingredients,
-}: TBurgerIngredientsProps): React.JSX.Element => {
   const preparedIngredients: Record<TIngredientType, TIngredient[]> = useMemo(() => {
     return ingredients.reduce(
       (acc, ingredient) => {
@@ -33,12 +40,14 @@ export const BurgerIngredients = ({
     initialActiveTab: 'bun',
   });
 
-  const [currentDetailedIngredient, setCurrentDetailedIngredient] = useState<
-    TIngredient | undefined
-  >(undefined);
-
   const handleIngredientClick = (ingredient: TIngredient): void => {
-    setCurrentDetailedIngredient(ingredient);
+    dispatch(setSelectedIngredient(ingredient));
+    // TODO: move to dnd helper
+    if (ingredient.type === 'bun') {
+      dispatch(setBun(ingredient));
+    } else {
+      dispatch(addIngredient(ingredient));
+    }
   };
 
   return (
@@ -70,14 +79,12 @@ export const BurgerIngredients = ({
           />
         ))}
       </div>
-      {!!currentDetailedIngredient && (
+      {!!selectedIngredient && (
         <Modal
           title="Детали ингредиента"
-          onClose={(): void => setCurrentDetailedIngredient(undefined)}
+          onClose={() => dispatch(clearSelectedIngredient())}
         >
-          {currentDetailedIngredient && (
-            <IngredientDetails ingredient={currentDetailedIngredient} />
-          )}
+          {selectedIngredient && <IngredientDetails ingredient={selectedIngredient} />}
         </Modal>
       )}
     </section>

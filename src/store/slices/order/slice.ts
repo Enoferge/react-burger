@@ -1,16 +1,21 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-type TOrder = {
+import { createOrderThunk } from './actions';
+
+import type { TCreateOrderResponse } from '@/api/order';
+
+export type TOrder = {
   number: number | null;
-  name: string | null;
 };
 
-type State = {
+export type TOrderSliceState = {
+  name: string | null;
   order: TOrder | null;
   isCreating: boolean;
 };
 
-const initialState: State = {
+const initialState: TOrderSliceState = {
+  name: null,
   order: null,
   isCreating: false,
 };
@@ -29,6 +34,24 @@ const orderSlice = createSlice({
       state.order = null;
       state.isCreating = false;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createOrderThunk.pending, (state) => {
+        state.isCreating = true;
+      })
+      .addCase(createOrderThunk.rejected, (state) => {
+        state.isCreating = false;
+        state.order = null;
+      })
+      .addCase(
+        createOrderThunk.fulfilled,
+        (state, action: PayloadAction<TCreateOrderResponse>) => {
+          state.isCreating = false;
+          state.order = { number: action.payload.order.number };
+          state.name = action.payload.name;
+        }
+      );
   },
 });
 

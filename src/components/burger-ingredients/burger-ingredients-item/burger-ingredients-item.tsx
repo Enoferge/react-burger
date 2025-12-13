@@ -1,5 +1,5 @@
 import { Price } from '@/components/price/price';
-import { useIngredientCount } from '@/contexts/order-context';
+import { useIngredientCount } from '@/hooks/use-ingredient-count';
 import { Counter } from '@krgaa/react-developer-burger-ui-components';
 
 import type { TIngredient } from '@/utils/types';

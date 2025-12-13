@@ -10,7 +10,7 @@ import styles from './burger-constructor-item.module.css';
 type TBurgerConstructorElementProps = {
   type?: 'top' | 'bottom';
   isLocked?: boolean;
-  handleClose: () => void;
+  handleClose?: () => void;
 };
 
 type TBurgerConstructorItemProps = {
