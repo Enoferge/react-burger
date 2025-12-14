@@ -36,7 +36,13 @@ export const BurgerIngredients = (): React.JSX.Element => {
     );
   }, [ingredients]);
 
-  const { activeTab, setSectionRef, handleTabClick } = useTabScroll<TIngredientType>({
+  const {
+    ingredientsSectionRef,
+    tabsContainerRef,
+    activeTab,
+    setSectionRef,
+    handleTabClick,
+  } = useTabScroll<TIngredientType>({
     initialActiveTab: 'bun',
   });
 
@@ -52,7 +58,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
 
   return (
     <section className={styles.burger_ingredients}>
-      <nav>
+      <nav ref={tabsContainerRef}>
         <ul className={`${styles.menu} p-0 m-0`}>
           {typedObjectEntries(IngredientTypeNames).map(([type, name]) => (
             <Tab
@@ -68,7 +74,10 @@ export const BurgerIngredients = (): React.JSX.Element => {
           ))}
         </ul>
       </nav>
-      <div className={`${styles.sections_wrapper} mt-10 mb-10`}>
+      <div
+        className={`${styles.sections_wrapper} mt-10 mb-10`}
+        ref={ingredientsSectionRef}
+      >
         {typedObjectEntries(preparedIngredients).map(([type, ingredients]) => (
           <BurgerIngredientsSection
             key={type}
