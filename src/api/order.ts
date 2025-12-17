@@ -12,8 +12,16 @@ export type TCreateOrderResponse = {
 export async function createOrder(
   ingredientIds: TIngredient['_id'][]
 ): Promise<TCreateOrderResponse> {
-  return fetchApi('/orders', {
+  const response = await fetchApi<TCreateOrderResponse>('/orders', {
+    body: JSON.stringify({ ingredients: ingredientIds }),
     method: 'POST',
-    body: JSON.stringify({ ids: ingredientIds }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
+
+  return {
+    name: response.name,
+    order: response.order,
+  };
 }
