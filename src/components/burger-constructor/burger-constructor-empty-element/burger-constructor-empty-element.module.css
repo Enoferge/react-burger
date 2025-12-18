@@ -22,3 +22,7 @@
 .empty-element_pos_bottom {
   border-radius: var(--bottom-constructor-item-border-radius);
 }
+
+.empty-state-accented {
+  border: 2px dashed #8585ad;
+}

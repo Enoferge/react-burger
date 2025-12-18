@@ -23,11 +23,14 @@ export const BurgerConstructorIngredientsDropZone = ({
 }: TBurgerConstructorIngredientsDropZoneProps): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [_, dropIngredientsTarget] = useDrop({
+  const [{ isDragging }, dropIngredientsTarget] = useDrop({
     accept: 'ingredient',
     drop: (item: { ingredient: TIngredient }) => {
       dispatch(addIngredient(item.ingredient));
     },
+    collect: (monitor) => ({
+      isDragging: monitor.canDrop(),
+    }),
   });
 
   return (
@@ -50,7 +53,10 @@ export const BurgerConstructorIngredientsDropZone = ({
           ))}
         </ul>
       ) : (
-        <BurgerConstructorEmptyElement ingredientType="ingredient" />
+        <BurgerConstructorEmptyElement
+          ingredientType="ingredient"
+          isAccented={isDragging}
+        />
       )}
     </div>
   );
