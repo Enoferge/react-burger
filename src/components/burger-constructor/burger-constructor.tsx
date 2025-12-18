@@ -4,6 +4,7 @@ import {
   removeIngredient as removeIngredientAction,
   type TConstructorIngredient,
 } from '@/store/slices/burger-constructor/slice';
+import { clearOrder } from '@/store/slices/order/slice';
 import { Button } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -64,7 +65,12 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </Button>
       </div>
       {isOrderDetailsModalOpened && (
-        <Modal onClose={(): void => setIsOrderDetailsModalOpened(false)}>
+        <Modal
+          onClose={(): void => {
+            setIsOrderDetailsModalOpened(false);
+            dispatch(clearOrder());
+          }}
+        >
           <OrderDetails order={order} />
         </Modal>
       )}

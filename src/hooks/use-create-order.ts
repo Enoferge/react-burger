@@ -45,6 +45,7 @@ export const useCreateOrder = ({
       currentOrderNumber !== previousOrderNumber
     ) {
       onCreationSuccess();
+      previousOrderNumberRef.current = currentOrderNumber;
     }
   }, [order?.number, isCreating, onCreationSuccess]);
 
