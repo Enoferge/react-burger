@@ -18,7 +18,7 @@ export const BurgerConstructorEmptyElement = ({
 
   return (
     <div
-      className={`${styles['empty-element']} ${isAccented ? `${styles['empty-state-accented']}` : ''} ${type ? styles[`empty-element_pos_${type}`] : 'mr-4 ml-4'}`}
+      className={`${styles['empty-element']} ${isAccented ? `${styles['empty-state-accented']}` : ''} ${type ? styles[`empty-element_pos_${type}`] : ''}`}
     >
       <p className="text text_type_main-default">{text}</p>
     </div>

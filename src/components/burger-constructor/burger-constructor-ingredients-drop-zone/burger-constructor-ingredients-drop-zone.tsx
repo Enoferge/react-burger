@@ -42,7 +42,7 @@ export const BurgerConstructorIngredientsDropZone = ({
       className={styles.ingredients_drop_zone}
     >
       {ingredients.length ? (
-        <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
+        <ul className={`${styles.scrollable_area}`}>
           {ingredients.map((ingredient, index) => (
             <li key={ingredient.uniqueId}>
               <BurgerConstructorItem
