@@ -6,12 +6,12 @@ import { BurgerConstructorEmptyElement } from '../burger-constructor-empty-eleme
 import { BurgerConstructorItem } from '../burger-constuctor-item/burger-constructor-item';
 
 import type { AppDispatch } from '@/store';
-import type { TIngredient } from '@/utils/types';
+import type { TConstructorIngredient } from '@/store/slices/burger-constructor/slice';
 import type { Ref } from 'react';
 
 type TBurgerConstructorBunDropZoneProps = {
   type: 'top' | 'bottom';
-  bun: TIngredient | null;
+  bun: TConstructorIngredient | null;
 };
 
 export const BurgerConstructorBunDropZone = ({
@@ -22,7 +22,7 @@ export const BurgerConstructorBunDropZone = ({
 
   const [{ isDragging }, dropBunTarget] = useDrop({
     accept: 'bun',
-    drop: (item: { ingredient: TIngredient }) => {
+    drop: (item: { ingredient: TConstructorIngredient }) => {
       dispatch(setBun(item.ingredient));
     },
     collect: (monitor) => ({

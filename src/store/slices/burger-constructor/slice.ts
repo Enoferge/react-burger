@@ -7,7 +7,7 @@ export type TConstructorIngredient = TIngredient & {
 };
 
 type State = {
-  bun: TIngredient | null;
+  bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };
 
@@ -20,10 +20,10 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructorSlice',
   initialState,
   reducers: {
-    setBun: (state, action: PayloadAction<TIngredient>) => {
+    setBun: (state, action: PayloadAction<TConstructorIngredient>) => {
       state.bun = action.payload;
     },
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
+    addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
       const uniqueId = crypto.randomUUID();
       state.ingredients.push({ ...action.payload, uniqueId });
     },
@@ -35,9 +35,22 @@ const burgerConstructorSlice = createSlice({
         (item) => item.uniqueId !== action.payload.uniqueId
       );
     },
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
+    ) => {
+      const { dragIndex, hoverIndex } = action.payload;
+      const draggedItem = state.ingredients[dragIndex];
+
+      const newIngredients = [...state.ingredients];
+
+      newIngredients.splice(dragIndex, 1);
+      newIngredients.splice(hoverIndex, 0, draggedItem);
+      state.ingredients = newIngredients;
+    },
   },
 });
 
-export const { setBun, addIngredient, removeIngredient } =
+export const { setBun, addIngredient, removeIngredient, moveIngredient } =
   burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;

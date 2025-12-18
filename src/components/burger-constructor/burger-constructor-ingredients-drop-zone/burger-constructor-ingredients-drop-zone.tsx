@@ -1,4 +1,4 @@
-import { addIngredient } from '@/store/slices/burger-constructor/slice';
+import { addIngredient, moveIngredient } from '@/store/slices/burger-constructor/slice';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
@@ -7,7 +7,6 @@ import { BurgerConstructorItem } from '../burger-constuctor-item/burger-construc
 
 import type { AppDispatch } from '@/store';
 import type { TConstructorIngredient } from '@/store/slices/burger-constructor/slice';
-import type { TIngredient } from '@/utils/types';
 import type { Ref } from 'react';
 
 import styles from './burger-constructor-ingredients-drop-zone.module.css';
@@ -25,13 +24,17 @@ export const BurgerConstructorIngredientsDropZone = ({
 
   const [{ isDragging }, dropIngredientsTarget] = useDrop({
     accept: 'ingredient',
-    drop: (item: { ingredient: TIngredient }) => {
+    drop: (item: { ingredient: TConstructorIngredient }) => {
       dispatch(addIngredient(item.ingredient));
     },
     collect: (monitor) => ({
       isDragging: monitor.canDrop(),
     }),
   });
+
+  const moveIngredientHandler = (dragIndex: number, hoverIndex: number): void => {
+    dispatch(moveIngredient({ dragIndex, hoverIndex }));
+  };
 
   return (
     <div
@@ -40,14 +43,16 @@ export const BurgerConstructorIngredientsDropZone = ({
     >
       {ingredients.length ? (
         <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
-          {ingredients.map((ingredient) => (
+          {ingredients.map((ingredient, index) => (
             <li key={ingredient.uniqueId}>
               <BurgerConstructorItem
+                index={index}
                 ingredient={ingredient}
                 elementProps={{
                   isLocked: false,
                   handleClose: () => onRemoveIngredient(ingredient),
                 }}
+                moveIngredient={moveIngredientHandler}
               />
             </li>
           ))}
