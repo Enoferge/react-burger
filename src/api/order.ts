@@ -20,8 +20,5 @@ export async function createOrder(
     },
   });
 
-  return {
-    name: response.name,
-    order: response.order,
-  };
+  return response;
 }
