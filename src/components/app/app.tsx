@@ -1,5 +1,7 @@
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppHeader } from '@components/app-header/app-header';
@@ -30,10 +32,10 @@ export const App = (): React.JSX.Element => {
             Загрузка ингредиентов...
           </p>
         ) : (
-          <>
+          <DndProvider backend={HTML5Backend}>
             <BurgerIngredients />
             <BurgerConstructor />
-          </>
+          </DndProvider>
         )}
       </main>
     </div>

@@ -1,0 +1,16 @@
+.ingredients_drop_zone {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.scrollable_area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: calc(var(--offset-base-size) * 4);
+  min-height: 0;
+  overflow-y: auto;
+  list-style: none;
+}

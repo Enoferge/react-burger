@@ -1,5 +1,4 @@
 import { useTabScroll } from '@/hooks/use-tab-scroll';
-import { addIngredient, setBun } from '@/store/slices/burger-constructor/slice';
 import {
   setSelectedIngredient,
   clearSelectedIngredient,
@@ -48,12 +47,6 @@ export const BurgerIngredients = (): React.JSX.Element => {
 
   const handleIngredientClick = (ingredient: TIngredient): void => {
     dispatch(setSelectedIngredient(ingredient));
-    // TODO: move to dnd helper
-    if (ingredient.type === 'bun') {
-      dispatch(setBun(ingredient));
-    } else {
-      dispatch(addIngredient(ingredient));
-    }
   };
 
   return (
