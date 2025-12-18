@@ -10,7 +10,6 @@
 
 .ingredients {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   align-items: center;
   gap: calc(var(--offset-base-size) * 4);
@@ -32,12 +31,4 @@
   justify-content: flex-end;
   align-items: center;
   gap: calc(var(--offset-base-size) * 10);
-}
-
-.empty_state {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }

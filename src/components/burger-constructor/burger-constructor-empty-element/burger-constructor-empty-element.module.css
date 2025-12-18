@@ -1,0 +1,24 @@
+.empty-element {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 536px;
+  min-height: 80px;
+  padding: 16px 24px;
+  color: #f2f2f3;
+  font-size: 16px;
+  line-height: 24px;
+  background-color: var(--background);
+  border-radius: var(--common-border-radius-s);
+}
+
+.empty-element_pos_top {
+  border-radius: var(--top-constructor-item-border-radius);
+}
+
+.empty-element_pos_bottom {
+  border-radius: var(--bottom-constructor-item-border-radius);
+}

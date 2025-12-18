@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
+import { BurgerConstructorEmptyElement } from './burger-constructor-empty-element/burger-constructor-empty-element';
 import { BurgerConstructorItem } from './burger-constuctor-item/burger-constructor-item';
 
 import type { AppDispatch, RootState } from '@/store';
@@ -41,43 +42,48 @@ export const BurgerConstructor = (): React.JSX.Element => {
     <section className={`${styles.wrapper} pb-3`}>
       <div className={`${styles.ingredients} p-0 m-0`}>
         {bun ? (
-          <>
-            <BurgerConstructorItem
-              ingredient={bun}
-              elementProps={{
-                type: 'top',
-                isLocked: true,
-              }}
-            />
-            <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
-              {ingredients.map((ingredient) => (
-                <li key={ingredient.uniqueId}>
-                  <BurgerConstructorItem
-                    ingredient={ingredient}
-                    elementProps={{
-                      isLocked: false,
-                      handleClose: () => removeIngredient(ingredient),
-                    }}
-                  />
-                </li>
-              ))}
-            </ul>
-            <BurgerConstructorItem
-              ingredient={bun}
-              elementProps={{
-                type: 'bottom',
-                isLocked: true,
-              }}
-            />
-          </>
+          <BurgerConstructorItem
+            ingredient={bun}
+            elementProps={{
+              type: 'top',
+              isLocked: true,
+            }}
+          />
         ) : (
-          <div className={`${styles.empty_state} p-10`}>
-            <p className="text text_type_main-default text_color_inactive">
-              Выберите булку и ингредиенты для бургера
-            </p>
-          </div>
+          <BurgerConstructorEmptyElement ingredientType="bun" type="top" />
+        )}
+
+        {ingredients.length ? (
+          <ul className={`${styles.scrollable_area} pl-4 pr-4`}>
+            {ingredients.map((ingredient) => (
+              <li key={ingredient.uniqueId}>
+                <BurgerConstructorItem
+                  ingredient={ingredient}
+                  elementProps={{
+                    isLocked: false,
+                    handleClose: () => removeIngredient(ingredient),
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <BurgerConstructorEmptyElement ingredientType="ingredient" />
+        )}
+
+        {bun ? (
+          <BurgerConstructorItem
+            ingredient={bun}
+            elementProps={{
+              type: 'bottom',
+              isLocked: true,
+            }}
+          />
+        ) : (
+          <BurgerConstructorEmptyElement ingredientType="bun" type="bottom" />
         )}
       </div>
+
       <div className={`${styles.footer} pl-4 pr-4 pt-10 pb-10`}>
         <Price price={totalPrice} size="M" />
         <Button
