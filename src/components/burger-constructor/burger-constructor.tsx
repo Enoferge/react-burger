@@ -3,6 +3,7 @@ import { useCreateOrder } from '@/hooks/use-create-order';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import {
   removeIngredient as removeIngredientAction,
+  clearConstructor,
   type TConstructorIngredient,
 } from '@/store/slices/burger-constructor/slice';
 import { clearOrder } from '@/store/slices/order/slice';
@@ -50,21 +51,28 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
       <div className={`${styles.footer} pl-4 pr-4 pt-10 pb-10`}>
         <Price price={totalPrice} size="M" />
-        <Button
-          htmlType="button"
-          type="primary"
-          size="medium"
-          disabled={isCreating}
-          onClick={handleCreateOrder}
-        >
-          Оформить заказ
-        </Button>
+        {isCreating ? (
+          <p className="text text_type_main-default text_color_inactive">
+            Оформление заказа...
+          </p>
+        ) : (
+          <Button
+            htmlType="button"
+            type="primary"
+            size="medium"
+            disabled={isCreating}
+            onClick={handleCreateOrder}
+          >
+            Оформить заказ
+          </Button>
+        )}
       </div>
       {isOrderDetailsModalOpened && (
         <Modal
           onClose={(): void => {
             setIsOrderDetailsModalOpened(false);
             dispatch(clearOrder());
+            dispatch(clearConstructor());
           }}
         >
           <OrderDetails order={order} />

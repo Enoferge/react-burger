@@ -1,3 +1,4 @@
+import { clearConstructor } from '@/store/slices/burger-constructor/slice';
 import { createOrderThunk } from '@/store/slices/order/actions';
 import { useEffect, useRef } from 'react';
 
@@ -42,10 +43,11 @@ export const useCreateOrder = ({
       !isCreating &&
       currentOrderNumber !== previousOrderNumber
     ) {
+      dispatch(clearConstructor());
       onCreationSuccess();
       previousOrderNumberRef.current = currentOrderNumber;
     }
-  }, [order?.number, isCreating, onCreationSuccess]);
+  }, [order?.number, isCreating, onCreationSuccess, dispatch]);
 
   return { order, name, isCreating, handleCreateOrder };
 };
