@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { useTabScroll } from '@/hooks/use-tab-scroll';
 import {
   setSelectedIngredient,
@@ -7,23 +8,19 @@ import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { BurgerIngredientsSection } from './burger-ingredients-section/burger-ingredients-section';
 
-import type { AppDispatch, RootState } from '@/store';
 import type { TIngredientType, TIngredient } from '@/utils/types';
 
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { ingredients } = useSelector((state: RootState) => state.ingredients);
-  const { selectedIngredient } = useSelector(
-    (state: RootState) => state.selectedIngredient
-  );
+  const dispatch = useAppDispatch();
+  const { ingredients } = useAppSelector((state) => state.ingredients);
+  const { selectedIngredient } = useAppSelector((state) => state.selectedIngredient);
 
   const preparedIngredients: Record<TIngredientType, TIngredient[]> = useMemo(() => {
     return ingredients.reduce(

@@ -1,20 +1,18 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
 
-import type { AppDispatch, RootState } from '@/store';
-
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { isLoading } = useSelector((state: RootState) => state.ingredients);
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
     void dispatch(fetchIngredientsThunk());

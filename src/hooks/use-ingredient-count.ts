@@ -1,12 +1,9 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from './use-redux-hooks';
 
-import type { RootState } from '@/store';
 import type { TIngredient } from '@/utils/types';
 
 export const useIngredientCount = (ingredientId: TIngredient['_id']): number => {
-  const { bun, ingredients } = useSelector(
-    (state: RootState) => state.burgerConstructor
-  );
+  const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
 
   if (bun?._id === ingredientId) {
     return 2;

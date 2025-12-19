@@ -1,12 +1,12 @@
+import { useAppDispatch } from '@/hooks/use-redux-hooks';
 import { addIngredient, moveIngredient } from '@/store/slices/burger-constructor/slice';
 import { useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 
 import { BurgerConstructorEmptyElement } from '../burger-constructor-empty-element/burger-constructor-empty-element';
 import { BurgerConstructorItem } from '../burger-constuctor-item/burger-constructor-item';
 
-import type { AppDispatch } from '@/store';
 import type { TConstructorIngredient } from '@/store/slices/burger-constructor/slice';
+import type { TIngredient } from '@/utils/types';
 import type { Ref } from 'react';
 
 import styles from './burger-constructor-ingredients-drop-zone.module.css';
@@ -20,11 +20,11 @@ export const BurgerConstructorIngredientsDropZone = ({
   ingredients,
   onRemoveIngredient,
 }: TBurgerConstructorIngredientsDropZoneProps): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const [{ isDragging }, dropIngredientsTarget] = useDrop({
     accept: 'ingredient',
-    drop: (item: { ingredient: TConstructorIngredient }) => {
+    drop: (item: { ingredient: TIngredient }) => {
       dispatch(addIngredient(item.ingredient));
     },
     collect: (monitor) => ({

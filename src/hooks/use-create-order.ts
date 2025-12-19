@@ -1,8 +1,8 @@
 import { createOrderThunk } from '@/store/slices/order/actions';
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import type { AppDispatch, RootState } from '@/store';
+import { useAppDispatch, useAppSelector } from './use-redux-hooks';
+
 import type { TOrderSliceState } from '@/store/slices/order/slice';
 
 type TUseCreateOrderProps = {
@@ -16,12 +16,10 @@ type TUseCreateOrderResult = TOrderSliceState & {
 export const useCreateOrder = ({
   onCreationSuccess,
 }: TUseCreateOrderProps): TUseCreateOrderResult => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { ingredients, bun } = useSelector(
-    (state: RootState) => state.burgerConstructor
-  );
+  const dispatch = useAppDispatch();
+  const { ingredients, bun } = useAppSelector((state) => state.burgerConstructor);
 
-  const { order, name, isCreating } = useSelector((state: RootState) => state.order);
+  const { order, name, isCreating } = useAppSelector((state) => state.order);
 
   const previousOrderNumberRef = useRef<number | null>(null);
 

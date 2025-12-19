@@ -1,5 +1,6 @@
 import { Price } from '@/components/price/price';
 import { useCreateOrder } from '@/hooks/use-create-order';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import {
   removeIngredient as removeIngredientAction,
   type TConstructorIngredient,
@@ -7,22 +8,17 @@ import {
 import { clearOrder } from '@/store/slices/order/slice';
 import { Button } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { BurgerConstructorBunDropZone } from './burger-constructor-bun-drop-zone/burger-constructor-bun-drop-zone';
 import { BurgerConstructorIngredientsDropZone } from './burger-constructor-ingredients-drop-zone/burger-constructor-ingredients-drop-zone';
 
-import type { AppDispatch, RootState } from '@/store';
-
 import styles from './burger-constructor.module.css';
 
 export const BurgerConstructor = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { bun, ingredients } = useSelector(
-    (state: RootState) => state.burgerConstructor
-  );
+  const dispatch = useAppDispatch();
+  const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
   const [isOrderDetailsModalOpened, setIsOrderDetailsModalOpened] = useState(false);
 
   const { order, isCreating, handleCreateOrder } = useCreateOrder({

@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { useDrag, useDrop, type DragSourceMonitor } from 'react-dnd';
 
 import type { TConstructorIngredient } from '@/store/slices/burger-constructor/slice';
+import type { TIngredient } from '@/utils/types';
 
 import styles from './burger-constructor-item.module.css';
 
@@ -17,7 +18,7 @@ type TBurgerConstructorElementProps = {
 
 type TBurgerConstructorItemProps = {
   index?: number;
-  ingredient: TConstructorIngredient;
+  ingredient: TConstructorIngredient | TIngredient;
   elementProps: TBurgerConstructorElementProps;
   moveIngredient?: (dragIndex: number, hoverIndex: number) => void;
 };
@@ -92,7 +93,8 @@ export const BurgerConstructorItem = ({
   const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>({
     type: 'item',
     item: () => {
-      return { id: ingredient.uniqueId, index: index ?? 0 };
+      const uniqueId = 'uniqueId' in ingredient ? ingredient.uniqueId : ingredient._id;
+      return { id: uniqueId, index: index ?? 0 };
     },
     collect: (monitor: DragSourceMonitor<DragItem, void>) => ({
       isDragging: monitor.isDragging(),
