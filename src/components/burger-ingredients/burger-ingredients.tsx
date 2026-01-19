@@ -1,16 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { useAppSelector } from '@/hooks/use-redux-hooks';
 import { useTabScroll } from '@/hooks/use-tab-scroll';
-import {
-  setSelectedIngredient,
-  clearSelectedIngredient,
-} from '@/store/slices/selected-ingredient/slice';
 import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { Modal } from '../modal/modal';
 import { BurgerIngredientsSection } from './burger-ingredients-section/burger-ingredients-section';
 
 import type { TIngredientType, TIngredient } from '@/utils/types';
@@ -18,9 +13,7 @@ import type { TIngredientType, TIngredient } from '@/utils/types';
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = (): React.JSX.Element => {
-  const dispatch = useAppDispatch();
   const { ingredients } = useAppSelector((state) => state.ingredients);
-  const { selectedIngredient } = useAppSelector((state) => state.selectedIngredient);
 
   const preparedIngredients: Record<TIngredientType, TIngredient[]> = useMemo(() => {
     return ingredients.reduce(
@@ -42,8 +35,13 @@ export const BurgerIngredients = (): React.JSX.Element => {
     initialActiveTab: 'bun',
   });
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleIngredientClick = (ingredient: TIngredient): void => {
-    dispatch(setSelectedIngredient(ingredient));
+    void navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
   };
 
   return (
@@ -78,14 +76,6 @@ export const BurgerIngredients = (): React.JSX.Element => {
           />
         ))}
       </div>
-      {!!selectedIngredient && (
-        <Modal
-          title="Детали ингредиента"
-          onClose={() => dispatch(clearSelectedIngredient())}
-        >
-          {selectedIngredient && <IngredientDetails ingredient={selectedIngredient} />}
-        </Modal>
-      )}
     </section>
   );
 };
