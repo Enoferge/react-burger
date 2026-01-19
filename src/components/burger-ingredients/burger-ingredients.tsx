@@ -1,8 +1,13 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { useTabScroll } from '@/hooks/use-tab-scroll';
+import {
+  setSelectedIngredient,
+  clearSelectedIngredient,
+} from '@/store/slices/selected-ingredient/slice';
 import { IngredientTypeNames } from '@/utils/constants';
 import { typedObjectEntries } from '@/utils/helpers';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
@@ -12,13 +17,11 @@ import type { TIngredientType, TIngredient } from '@/utils/types';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-};
+export const BurgerIngredients = (): React.JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { ingredients } = useAppSelector((state) => state.ingredients);
+  const { selectedIngredient } = useAppSelector((state) => state.selectedIngredient);
 
-export const BurgerIngredients = ({
-  ingredients,
-}: TBurgerIngredientsProps): React.JSX.Element => {
   const preparedIngredients: Record<TIngredientType, TIngredient[]> = useMemo(() => {
     return ingredients.reduce(
       (acc, ingredient) => {
@@ -29,21 +32,23 @@ export const BurgerIngredients = ({
     );
   }, [ingredients]);
 
-  const { activeTab, setSectionRef, handleTabClick } = useTabScroll<TIngredientType>({
+  const {
+    ingredientsSectionRef,
+    tabsContainerRef,
+    activeTab,
+    setSectionRef,
+    handleTabClick,
+  } = useTabScroll<TIngredientType>({
     initialActiveTab: 'bun',
   });
 
-  const [currentDetailedIngredient, setCurrentDetailedIngredient] = useState<
-    TIngredient | undefined
-  >(undefined);
-
   const handleIngredientClick = (ingredient: TIngredient): void => {
-    setCurrentDetailedIngredient(ingredient);
+    dispatch(setSelectedIngredient(ingredient));
   };
 
   return (
     <section className={styles.burger_ingredients}>
-      <nav>
+      <nav ref={tabsContainerRef}>
         <ul className={`${styles.menu} p-0 m-0`}>
           {typedObjectEntries(IngredientTypeNames).map(([type, name]) => (
             <Tab
@@ -59,7 +64,10 @@ export const BurgerIngredients = ({
           ))}
         </ul>
       </nav>
-      <div className={`${styles.sections_wrapper} mt-10 mb-10`}>
+      <div
+        className={`${styles.sections_wrapper} mt-10 mb-10`}
+        ref={ingredientsSectionRef}
+      >
         {typedObjectEntries(preparedIngredients).map(([type, ingredients]) => (
           <BurgerIngredientsSection
             key={type}
@@ -70,14 +78,12 @@ export const BurgerIngredients = ({
           />
         ))}
       </div>
-      {!!currentDetailedIngredient && (
+      {!!selectedIngredient && (
         <Modal
           title="Детали ингредиента"
-          onClose={(): void => setCurrentDetailedIngredient(undefined)}
+          onClose={() => dispatch(clearSelectedIngredient())}
         >
-          {currentDetailedIngredient && (
-            <IngredientDetails ingredient={currentDetailedIngredient} />
-          )}
+          {selectedIngredient && <IngredientDetails ingredient={selectedIngredient} />}
         </Modal>
       )}
     </section>

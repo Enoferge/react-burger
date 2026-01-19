@@ -10,20 +10,10 @@
 
 .ingredients {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: calc(var(--offset-base-size) * 4);
   min-height: 0;
-}
-
-.scrollable_area {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--offset-base-size) * 4);
-  min-height: 0;
-  overflow-y: auto;
-  list-style: none;
 }
 
 .footer {
@@ -32,12 +22,4 @@
   justify-content: flex-end;
   align-items: center;
   gap: calc(var(--offset-base-size) * 10);
-}
-
-.empty_state {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }

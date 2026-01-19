@@ -1,6 +1,8 @@
-import { OrderProvider } from '@/contexts/order-context';
-import { useIngredients } from '@/hooks/use-ingredients';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
@@ -9,33 +11,32 @@ import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredi
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const { ingredients, isLoading, getIngredients } = useIngredients();
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
-    void getIngredients();
-  }, [getIngredients]);
+    void dispatch(fetchIngredientsThunk());
+  }, [dispatch]);
 
   return (
-    <OrderProvider>
-      <div className={styles.app}>
-        <AppHeader />
-        <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-          Соберите бургер
-        </h1>
-        <main className={`${styles.main} pl-5 pr-5`}>
-          {isLoading ? (
-            <p className="text text_type_main-default text_color_inactive">
-              Загрузка ингредиентов...
-            </p>
-          ) : (
-            <>
-              <BurgerIngredients ingredients={ingredients} />
-              <BurgerConstructor ingredients={ingredients} />
-            </>
-          )}
-        </main>
-      </div>
-    </OrderProvider>
+    <div className={styles.app}>
+      <AppHeader />
+      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+        Соберите бургер
+      </h1>
+      <main className={`${styles.main} pl-5 pr-5`}>
+        {isLoading ? (
+          <p className="text text_type_main-default text_color_inactive">
+            Загрузка ингредиентов...
+          </p>
+        ) : (
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DndProvider>
+        )}
+      </main>
+    </div>
   );
 };
 
