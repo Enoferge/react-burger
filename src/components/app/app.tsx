@@ -2,6 +2,7 @@ import { useAppDispatch } from '@/hooks/use-redux-hooks';
 import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
 import { Ingredient } from '@/pages/ingredient/ingredient';
+import { Login } from '@/pages/login/login';
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, type Location } from 'react-router-dom';
@@ -26,6 +27,7 @@ export const App = (): React.JSX.Element => {
       <Routes location={backgroundLocation ?? location}>
         <Route path="/" element={<Home />} />
         <Route path="/ingredients/:id" element={<Ingredient />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       {backgroundLocation && (

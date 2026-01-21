@@ -27,7 +27,6 @@ export const Home = (): React.JSX.Element => {
           </DndProvider>
         )}
       </main>
-      {/* <Outlet /> */}
     </>
   );
 };
