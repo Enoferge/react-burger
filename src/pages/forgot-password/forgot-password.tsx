@@ -1,23 +1,35 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { AuthForm } from '@/pages/auth-form/auth-form';
+import { requestPasswordResetThunk } from '@/store/slices/password-reset/actions';
 import { EmailInput } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
 export const ForgotPassword = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLoading, resetRequestSuccess, error } = useAppSelector(
+    (state) => state.passwordReset
+  );
+
+  useEffect(() => {
+    if (resetRequestSuccess) {
+      void navigate(ROUTES.RESET_PASSWORD);
+    }
+  }, [resetRequestSuccess, navigate]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log({
-      email,
-    });
+    void dispatch(requestPasswordResetThunk({ email }));
   };
 
   return (
     <AuthForm
       title="Восстановление пароля"
-      buttonText="Восстановить"
+      buttonText={isLoading ? 'Отправка...' : 'Восстановить'}
       onSubmit={handleSubmit}
       links={[
         {
@@ -34,6 +46,9 @@ export const ForgotPassword = (): React.JSX.Element => {
         placeholder="Укажите e-mail"
         isIcon={true}
       />
+      {error && (
+        <p className="text text_type_main-default text_color_error mt-4">{error}</p>
+      )}
     </AuthForm>
   );
 };
