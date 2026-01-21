@@ -1,4 +1,5 @@
 import { useAppDispatch } from '@/hooks/use-redux-hooks';
+import { ROUTES } from '@/pages/constants';
 import { ForgotPassword } from '@/pages/forgot-password/forgot-password';
 import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
@@ -6,6 +7,7 @@ import { Ingredient } from '@/pages/ingredient/ingredient';
 import { Login } from '@/pages/login/login';
 import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
+import { ResetPassword } from '@/pages/reset-password/reset-password';
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, type Location } from 'react-router-dom';
@@ -28,12 +30,13 @@ export const App = (): React.JSX.Element => {
     <div className={styles.app}>
       <AppHeader />
       <Routes location={backgroundLocation ?? location}>
-        <Route path="/" element={<Home />} />
+        <Route path={ROUTES.HOME} element={<Home />} />
         <Route path="/ingredients/:id" element={<Ingredient />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path={ROUTES.REGISTER} element={<Register />} />
+        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+        <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
+        <Route path={ROUTES.PROFILE} element={<Profile />} />
       </Routes>
 
       {backgroundLocation && (

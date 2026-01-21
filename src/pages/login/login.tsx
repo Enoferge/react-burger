@@ -30,7 +30,7 @@ export const Login = (): React.JSX.Element => {
         {
           text: 'Забыли пароль?',
           linkText: 'Восстановить пароль',
-          to: ROUTES.FORGOT_PASS,
+          to: ROUTES.FORGOT_PASSWORD,
         },
       ]}
     >
