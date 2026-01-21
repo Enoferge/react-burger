@@ -1,8 +1,10 @@
 import { useAppDispatch } from '@/hooks/use-redux-hooks';
+import { ForgotPassword } from '@/pages/forgot-password/forgot-password';
 import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
 import { Ingredient } from '@/pages/ingredient/ingredient';
 import { Login } from '@/pages/login/login';
+import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
@@ -30,6 +32,8 @@ export const App = (): React.JSX.Element => {
         <Route path="/ingredients/:id" element={<Ingredient />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
 
       {backgroundLocation && (
