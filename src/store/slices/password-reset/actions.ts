@@ -13,13 +13,13 @@ type ConfirmPasswordResetPayload = {
 export const requestPasswordResetThunk = createAsyncThunk(
   'passwordReset/request',
   async (payload: RequestPasswordResetPayload) => {
-    return await requestPasswordReset(payload.email);
+    return await requestPasswordReset(payload.email, null);
   }
 );
 
 export const confirmPasswordResetThunk = createAsyncThunk(
   'passwordReset/confirm',
   async (payload: ConfirmPasswordResetPayload) => {
-    return await confirmPasswordReset(payload.password, payload.token);
+    return await confirmPasswordReset(payload.password, payload.token, null);
   }
 );

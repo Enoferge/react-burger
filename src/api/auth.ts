@@ -12,7 +12,6 @@ export type User = {
 };
 
 export type RegisterResponse = {
-  success: boolean;
   user: User;
   accessToken: string;
   refreshToken: string;
@@ -24,7 +23,6 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
-  success: true;
   accessToken: string;
   refreshToken: string;
   user: User;
@@ -32,22 +30,62 @@ export type LoginResponse = {
   name: string;
 };
 
-export async function register(data: RegisterRequest): Promise<RegisterResponse> {
-  return await fetchApi<RegisterResponse>('/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+export type RefreshTokenRequest = {
+  token: string;
+};
+
+export type RefreshTokenResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export async function register(
+  data: RegisterRequest,
+  accessToken?: string | null
+): Promise<RegisterResponse> {
+  return await fetchApi<RegisterResponse>(
+    '/auth/register',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     },
-    body: JSON.stringify(data),
-  });
+    accessToken
+  );
 }
 
-export async function login(data: LoginRequest): Promise<LoginResponse> {
-  return await fetchApi<LoginResponse>('/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+export async function login(
+  data: LoginRequest,
+  accessToken?: string | null
+): Promise<LoginResponse> {
+  return await fetchApi<LoginResponse>(
+    '/auth/login',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     },
-    body: JSON.stringify(data),
-  });
+    accessToken
+  );
+}
+
+export async function refreshToken(
+  data: RefreshTokenRequest,
+  accessToken?: string | null
+): Promise<RefreshTokenResponse> {
+  return await fetchApi<RefreshTokenResponse>(
+    '/auth/token',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+    accessToken
+  );
 }

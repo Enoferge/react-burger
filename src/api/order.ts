@@ -10,15 +10,20 @@ export type TCreateOrderResponse = {
 };
 
 export async function createOrder(
-  ingredientIds: TIngredient['_id'][]
+  ingredientIds: TIngredient['_id'][],
+  accessToken?: string | null
 ): Promise<TCreateOrderResponse> {
-  const response = await fetchApi<TCreateOrderResponse>('/orders', {
-    body: JSON.stringify({ ingredients: ingredientIds }),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetchApi<TCreateOrderResponse>(
+    '/orders',
+    {
+      body: JSON.stringify({ ingredients: ingredientIds }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  });
+    accessToken
+  );
 
   return response;
 }

@@ -1,8 +1,14 @@
+import { tokenStorage } from '@/utils/token-storage';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { loginThunk, registerThunk } from './actions';
+import { loginThunk, refreshTokenThunk, registerThunk } from './actions';
 
-import type { LoginResponse, RegisterResponse, User } from '@/api/auth';
+import type {
+  LoginResponse,
+  RefreshTokenResponse,
+  RegisterResponse,
+  User,
+} from '@/api/auth';
 
 type AuthState = {
   user: User | null;
@@ -13,10 +19,12 @@ type AuthState = {
   authSuccess: boolean;
 };
 
+const savedRefreshToken = tokenStorage.getRefreshToken();
+
 const initialState: AuthState = {
   user: null,
   accessToken: null,
-  refreshToken: null,
+  refreshToken: savedRefreshToken,
   isLoading: false,
   error: null,
   authSuccess: false,
@@ -36,6 +44,17 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.authSuccess = false;
       state.error = null;
+      tokenStorage.removeRefreshToken();
+    },
+    updateTokens: (
+      state,
+      {
+        payload: { accessToken, refreshToken },
+      }: PayloadAction<{ accessToken: string; refreshToken: string }>
+    ) => {
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+      tokenStorage.setRefreshToken(refreshToken);
     },
   },
   extraReducers: (builder) => {
@@ -55,6 +74,7 @@ const authSlice = createSlice({
         state.user = user;
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
+        tokenStorage.setRefreshToken(refreshToken);
       }
     );
     builder.addCase(registerThunk.rejected, (state, action) => {
@@ -62,6 +82,7 @@ const authSlice = createSlice({
       state.error = action.error.message ?? 'Failed to register';
       state.authSuccess = false;
     });
+
     builder.addCase(loginThunk.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -79,6 +100,7 @@ const authSlice = createSlice({
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
         state.user = user;
+        tokenStorage.setRefreshToken(refreshToken);
       }
     );
     builder.addCase(loginThunk.rejected, (state, action) => {
@@ -86,8 +108,19 @@ const authSlice = createSlice({
       state.error = action.error.message ?? 'Failed to login';
       state.authSuccess = false;
     });
+    builder.addCase(
+      refreshTokenThunk.fulfilled,
+      (
+        state,
+        { payload: { accessToken, refreshToken } }: PayloadAction<RefreshTokenResponse>
+      ) => {
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
+        tokenStorage.setRefreshToken(refreshToken);
+      }
+    );
   },
 });
 
-export const { resetAuthState, clearAuth } = authSlice.actions;
+export const { resetAuthState, clearAuth, updateTokens } = authSlice.actions;
 export default authSlice.reducer;
