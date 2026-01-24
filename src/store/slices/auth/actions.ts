@@ -13,14 +13,14 @@ let refreshPromise: Promise<{ accessToken: string; refreshToken: string }> | nul
 export const registerThunk = createAsyncThunk(
   'auth/register',
   async (payload: RegisterRequest) => {
-    return await register(payload, null);
+    return await register(payload);
   }
 );
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
   async (payload: LoginRequest) => {
-    return await login(payload, null);
+    return await login(payload);
   }
 );
 
@@ -46,7 +46,7 @@ export const refreshTokenThunk = createAsyncThunk(
       }
 
       try {
-        const result = await refreshToken({ token: refreshTokenValue }, null);
+        const result = await refreshToken({ token: refreshTokenValue });
         return result;
       } finally {
         refreshPromise = null;

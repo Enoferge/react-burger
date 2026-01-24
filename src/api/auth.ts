@@ -39,53 +39,34 @@ export type RefreshTokenResponse = {
   refreshToken: string;
 };
 
-export async function register(
-  data: RegisterRequest,
-  accessToken?: string | null
-): Promise<RegisterResponse> {
-  return await fetchApi<RegisterResponse>(
-    '/auth/register',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+export async function register(data: RegisterRequest): Promise<RegisterResponse> {
+  return await fetchApi<RegisterResponse>('/auth/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    accessToken
-  );
+    body: JSON.stringify(data),
+  });
 }
 
-export async function login(
-  data: LoginRequest,
-  accessToken?: string | null
-): Promise<LoginResponse> {
-  return await fetchApi<LoginResponse>(
-    '/auth/login',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+export async function login(data: LoginRequest): Promise<LoginResponse> {
+  return await fetchApi<LoginResponse>('/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    accessToken
-  );
+    body: JSON.stringify(data),
+  });
 }
 
 export async function refreshToken(
-  data: RefreshTokenRequest,
-  accessToken?: string | null
+  data: RefreshTokenRequest
 ): Promise<RefreshTokenResponse> {
-  return await fetchApi<RefreshTokenResponse>(
-    '/auth/token',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+  return await fetchApi<RefreshTokenResponse>('/auth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    accessToken
-  );
+    body: JSON.stringify(data),
+  });
 }

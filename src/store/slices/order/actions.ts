@@ -6,6 +6,4 @@ import type { TIngredient } from '@/utils/types';
 export const createOrderThunk = createAuthenticatedThunk<
   TCreateOrderResponse,
   TIngredient['_id'][]
->('order/createOrder', (ingredientIds, accessToken) =>
-  createOrder(ingredientIds, accessToken)
-);
+>('order/createOrder', createOrder);

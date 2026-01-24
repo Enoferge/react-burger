@@ -1,5 +1,7 @@
 import { HttpError } from '@/utils/http-error';
 
+import { tokenContext } from './token-context';
+
 export const BASE_API_URL = 'https://norma.education-services.ru/api';
 
 type ApiResponse<T> = {
@@ -18,8 +20,9 @@ export default async function fetchApi<T>(
 ): Promise<T> {
   const headers = new Headers(options?.headers);
 
-  if (accessToken) {
-    headers.set('authorization', accessToken);
+  const token = accessToken ?? tokenContext.get();
+  if (token) {
+    headers.set('authorization', token);
   }
 
   const response = await fetch(`${BASE_API_URL}${url}`, {
