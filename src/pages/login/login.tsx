@@ -1,26 +1,38 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { AuthForm } from '@/pages/auth-form/auth-form';
+import { loginThunk } from '@/store/slices/auth/actions';
 import { EmailInput, PasswordInput } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
 export const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { authSuccess, isLoading, error } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (authSuccess) {
+      void navigate(ROUTES.HOME);
+    }
+  }, [authSuccess, navigate]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log({
-      email,
-      password,
-    });
+    if (email && password) {
+      void dispatch(loginThunk({ email, password }));
+    }
   };
 
   return (
     <AuthForm
       title="Вход"
-      buttonText="Войти"
+      buttonText={isLoading ? 'Вход...' : 'Войти'}
       onSubmit={handleSubmit}
+      error={error}
       links={[
         {
           text: 'Вы — новый пользователь?',
@@ -35,14 +47,18 @@ export const Login = (): React.JSX.Element => {
       ]}
     >
       <EmailInput
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setEmail(e.target.value);
+        }}
         value={email}
         name={'email'}
         placeholder="E-mail"
         isIcon={true}
       />
       <PasswordInput
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setPassword(e.target.value);
+        }}
         value={password}
         name={'password'}
         extraClass="mt-6"

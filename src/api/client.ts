@@ -4,6 +4,11 @@ type ApiResponse<T> = {
   success: boolean;
 } & T;
 
+type ApiErrorResponse = {
+  success: false;
+  message?: string;
+};
+
 export default async function fetchApi<T>(
   url: string,
   options?: RequestInit
@@ -11,17 +16,38 @@ export default async function fetchApi<T>(
   try {
     const response = await fetch(`${BASE_API_URL}${url}`, options);
 
+    let result: unknown;
+    try {
+      result = await response.json();
+    } catch (_jsonError) {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+      }
+      throw new Error('Failed to parse response as JSON');
+    }
+
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+      const errorMessage =
+        result &&
+        typeof result === 'object' &&
+        'message' in result &&
+        typeof result.message === 'string'
+          ? result.message
+          : `HTTP error: ${response.status} ${response.statusText}`;
+      throw new Error(errorMessage);
     }
 
-    const result = (await response.json()) as unknown as ApiResponse<T>;
+    const apiResult = result as ApiResponse<T> | ApiErrorResponse;
 
-    if (!result.success) {
-      throw new Error('API returned success: false');
+    if (!apiResult.success) {
+      const errorMessage =
+        'message' in apiResult && apiResult.message
+          ? apiResult.message
+          : 'API returned success: false';
+      throw new Error(errorMessage);
     }
 
-    const { success: _success, ...rest } = result;
+    const { success: _success, ...rest } = apiResult;
 
     return rest as T;
   } catch (error) {

@@ -1,11 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { registerThunk } from './actions';
+import { loginThunk, registerThunk } from './actions';
 
-type User = {
-  email: string;
-  name: string;
-};
+import type { LoginResponse, RegisterResponse, User } from '@/api/auth';
 
 type AuthState = {
   user: User | null;
@@ -13,7 +10,7 @@ type AuthState = {
   refreshToken: string | null;
   isLoading: boolean;
   error: string | null;
-  registerSuccess: boolean;
+  authSuccess: boolean;
 };
 
 const initialState: AuthState = {
@@ -22,7 +19,7 @@ const initialState: AuthState = {
   refreshToken: null,
   isLoading: false,
   error: null,
-  registerSuccess: false,
+  authSuccess: false,
 };
 
 const authSlice = createSlice({
@@ -30,14 +27,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     resetAuthState: (state) => {
-      state.registerSuccess = false;
+      state.authSuccess = false;
       state.error = null;
     },
     clearAuth: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
-      state.registerSuccess = false;
+      state.authSuccess = false;
       state.error = null;
     },
   },
@@ -45,29 +42,49 @@ const authSlice = createSlice({
     builder.addCase(registerThunk.pending, (state) => {
       state.isLoading = true;
       state.error = null;
-      state.registerSuccess = false;
+      state.authSuccess = false;
     });
     builder.addCase(
       registerThunk.fulfilled,
       (
         state,
-        action: PayloadAction<{
-          user: User;
-          accessToken: string;
-          refreshToken: string;
-        }>
+        { payload: { accessToken, refreshToken, user } }: PayloadAction<RegisterResponse>
       ) => {
         state.isLoading = false;
-        state.registerSuccess = true;
-        state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
+        state.authSuccess = true;
+        state.user = user;
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
       }
     );
     builder.addCase(registerThunk.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message ?? 'Failed to register';
-      state.registerSuccess = false;
+      state.authSuccess = false;
+    });
+    builder.addCase(loginThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+      state.authSuccess = false;
+    });
+    builder.addCase(
+      loginThunk.fulfilled,
+      (
+        state,
+        { payload: { accessToken, refreshToken, user } }: PayloadAction<LoginResponse>
+      ) => {
+        state.isLoading = false;
+        state.error = null;
+        state.authSuccess = true;
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
+        state.user = user;
+      }
+    );
+    builder.addCase(loginThunk.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message ?? 'Failed to login';
+      state.authSuccess = false;
     });
   },
 });

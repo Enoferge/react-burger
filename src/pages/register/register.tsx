@@ -17,13 +17,13 @@ export const Register = (): React.JSX.Element => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, registerSuccess, error } = useAppSelector((state) => state.auth);
+  const { isLoading, authSuccess, error } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (registerSuccess) {
+    if (authSuccess) {
       void navigate(ROUTES.HOME);
     }
-  }, [registerSuccess, navigate]);
+  }, [authSuccess, navigate]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -37,6 +37,7 @@ export const Register = (): React.JSX.Element => {
       title="Регистрация"
       buttonText={isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
       onSubmit={handleSubmit}
+      error={error}
       links={[
         {
           text: 'Уже зарегистрированы?',
@@ -72,9 +73,6 @@ export const Register = (): React.JSX.Element => {
         name={'password'}
         extraClass="mt-6"
       />
-      {error && (
-        <p className="text text_type_main-default text_color_error mt-4">{error}</p>
-      )}
     </AuthForm>
   );
 };

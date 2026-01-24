@@ -18,6 +18,7 @@ type AuthFormProps = {
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   children: ReactNode;
   links?: AuthLink[];
+  error?: string | null;
 };
 
 export const AuthForm = ({
@@ -26,6 +27,7 @@ export const AuthForm = ({
   onSubmit,
   children,
   links,
+  error,
 }: AuthFormProps): React.JSX.Element => {
   return (
     <PageLayout>
@@ -33,6 +35,9 @@ export const AuthForm = ({
         <h1 className="text text_type_main-medium">{title}</h1>
         <form onSubmit={onSubmit} className={`${styles.form} mt-6`}>
           {children}
+          {error && (
+            <p className="text text_type_main-default text_color_error mt-4">{error}</p>
+          )}
           <Button
             htmlType="submit"
             type="primary"
