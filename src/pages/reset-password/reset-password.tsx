@@ -1,9 +1,10 @@
 import { TextInput } from '@/components/text-input/text-input';
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { AuthForm } from '@/pages/auth-form/auth-form';
 import { confirmPasswordResetThunk } from '@/store/slices/password-reset/actions';
 import { PasswordInput } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
@@ -13,8 +14,7 @@ type ResetPasswordLocationState = {
 };
 
 export const ResetPassword = (): React.JSX.Element => {
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+  const { values, handleChange } = useForm({ password: '', code: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,11 +30,11 @@ export const ResetPassword = (): React.JSX.Element => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (password && code) {
+    if (values.password && values.code) {
       void dispatch(
         confirmPasswordResetThunk({
-          password,
-          token: code,
+          password: values.password,
+          token: values.code,
         })
       );
     }
@@ -60,18 +60,14 @@ export const ResetPassword = (): React.JSX.Element => {
       ]}
     >
       <PasswordInput
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setPassword(e.target.value);
-        }}
-        value={password}
+        onChange={handleChange}
+        value={values.password}
         name={'password'}
         placeholder="Введите новый пароль"
       />
       <TextInput
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setCode(e.target.value);
-        }}
-        value={code}
+        onChange={handleChange}
+        value={values.code}
         name={'code'}
         placeholder="Введите код из письма"
         isIcon

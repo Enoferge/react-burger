@@ -1,8 +1,9 @@
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { AuthForm } from '@/pages/auth-form/auth-form';
 import { loginThunk } from '@/store/slices/auth/actions';
 import { EmailInput, PasswordInput } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
@@ -10,8 +11,7 @@ import { ROUTES } from '../constants';
 import type { LocationState } from '@/types';
 
 export const Login = (): React.JSX.Element => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange } = useForm({ email: '', password: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,8 +29,8 @@ export const Login = (): React.JSX.Element => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (email && password) {
-      void dispatch(loginThunk({ email, password }));
+    if (values.email && values.password) {
+      void dispatch(loginThunk({ email: values.email, password: values.password }));
     }
   };
 
@@ -54,19 +54,15 @@ export const Login = (): React.JSX.Element => {
       ]}
     >
       <EmailInput
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setEmail(e.target.value);
-        }}
-        value={email}
+        onChange={handleChange}
+        value={values.email}
         name={'email'}
         placeholder="E-mail"
         isIcon={true}
       />
       <PasswordInput
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setPassword(e.target.value);
-        }}
-        value={password}
+        onChange={handleChange}
+        value={values.password}
         name={'password'}
         extraClass="mt-6"
       />

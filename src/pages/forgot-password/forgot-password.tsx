@@ -1,14 +1,15 @@
+import { useForm } from '@/hooks/use-form';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { AuthForm } from '@/pages/auth-form/auth-form';
 import { requestPasswordResetThunk } from '@/store/slices/password-reset/actions';
 import { EmailInput } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
 export const ForgotPassword = (): React.JSX.Element => {
-  const [email, setEmail] = useState('');
+  const { values, handleChange } = useForm({ email: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isLoading, resetRequestSuccess, error } = useAppSelector(
@@ -23,7 +24,7 @@ export const ForgotPassword = (): React.JSX.Element => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    void dispatch(requestPasswordResetThunk({ email }));
+    void dispatch(requestPasswordResetThunk({ email: values.email }));
   };
 
   return (
@@ -40,8 +41,8 @@ export const ForgotPassword = (): React.JSX.Element => {
       ]}
     >
       <EmailInput
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
+        onChange={handleChange}
+        value={values.email}
         name={'email'}
         placeholder="Укажите e-mail"
         isIcon={true}
