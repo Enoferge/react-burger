@@ -8,7 +8,7 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
@@ -18,7 +18,7 @@ import styles from './profile.module.css';
 
 export const Profile = (): React.JSX.Element => {
   const { user, isEditInProgress } = useAppSelector((state) => state.auth);
-  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [innerUser, setInnerUser] = useState<User | null>(user);
@@ -29,8 +29,10 @@ export const Profile = (): React.JSX.Element => {
     if (user) {
       setInnerUser(user);
       setPassword('');
+    } else {
+      void navigate(ROUTES.LOGIN);
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -76,23 +78,26 @@ export const Profile = (): React.JSX.Element => {
     );
   }, [innerUser, user, password]);
 
-  const isProfileActive = location.pathname === ROUTES.PROFILE;
-
   return (
     <PageLayout className={styles.wrapper}>
       <nav className={styles.nav}>
-        <Link
+        <NavLink
           to={ROUTES.PROFILE}
-          className={`${styles.navLink} ${isProfileActive ? styles.navLinkActive : ''} text text_type_main-medium`}
+          end
+          className={({ isActive }) =>
+            `${styles.navLink} ${isActive ? styles.navLinkActive : ''} text text_type_main-medium`
+          }
         >
           Профиль
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to={`${ROUTES.PROFILE}/orders`}
-          className={`${styles.navLink} text text_type_main-medium`}
+          className={({ isActive }) =>
+            `${styles.navLink} ${isActive ? styles.navLinkActive : ''} text text_type_main-medium`
+          }
         >
           История заказов
-        </Link>
+        </NavLink>
         <button
           type="button"
           onClick={handleLogout}

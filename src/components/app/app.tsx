@@ -5,6 +5,7 @@ import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
 import { Ingredient } from '@/pages/ingredient/ingredient';
 import { Login } from '@/pages/login/login';
+import { ProfileOrders } from '@/pages/profile-orders/profile-orders';
 import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
 import { ResetPassword } from '@/pages/reset-password/reset-password';
@@ -86,6 +87,14 @@ export const App = (): React.JSX.Element => {
           element={
             <ProtectedRoute access={ACCESS_TYPE.AUTH}>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.PROFILE}/orders`}
+          element={
+            <ProtectedRoute access={ACCESS_TYPE.AUTH}>
+              <ProfileOrders />
             </ProtectedRoute>
           }
         />

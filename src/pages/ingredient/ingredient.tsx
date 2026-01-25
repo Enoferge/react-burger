@@ -1,4 +1,5 @@
 import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
+import { Loading } from '@/components/loading/loading';
 import { PageLayout } from '@/components/page-layout/page-layout';
 import { useAppSelector } from '@/hooks/use-redux-hooks';
 import { useParams } from 'react-router-dom';
@@ -14,9 +15,7 @@ export const Ingredient = (): React.JSX.Element => {
     return (
       <PageLayout>
         <div className={styles.wrapper}>
-          <p className="text text_type_main-default text_color_inactive">
-            Загрузка ингредиентов...
-          </p>
+          <Loading message="Загрузка ингредиентов..." />
         </div>
       </PageLayout>
     );

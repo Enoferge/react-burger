@@ -1,3 +1,4 @@
+import { Loading } from '@/components/loading/loading';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
 import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
@@ -24,9 +25,7 @@ export const Home = (): React.JSX.Element => {
       </h1>
       <main className={`${styles.main} pl-5 pr-5`}>
         {isLoading ? (
-          <p className="text text_type_main-default text_color_inactive">
-            Загрузка ингредиентов...
-          </p>
+          <Loading message="Загрузка ингредиентов..." />
         ) : (
           <DndProvider backend={HTML5Backend}>
             <BurgerIngredients />
