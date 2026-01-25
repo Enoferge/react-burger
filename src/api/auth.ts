@@ -30,6 +30,14 @@ export type LoginResponse = {
   name: string;
 };
 
+export type LogoutRequest = {
+  token: string;
+};
+
+export type LogoutResponse = {
+  message: string;
+};
+
 export type RefreshTokenRequest = {
   token: string;
 };
@@ -51,6 +59,16 @@ export async function register(data: RegisterRequest): Promise<RegisterResponse>
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {
   return await fetchApi<LoginResponse>('/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function logout(data: LogoutRequest): Promise<LogoutResponse> {
+  return await fetchApi<LogoutResponse>('/auth/logout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

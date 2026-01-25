@@ -1,5 +1,7 @@
 import { PageLayout } from '@/components/page-layout/page-layout';
 import { TextInput } from '@/components/text-input/text-input';
+import { useAppDispatch } from '@/hooks/use-redux-hooks';
+import { logoutThunk } from '@/store/slices/auth/actions';
 import {
   Button,
   EmailInput,
@@ -23,6 +25,7 @@ export const Profile = (): React.JSX.Element => {
   const [email, setEmail] = useState(initialFormValues.email);
   const [password, setPassword] = useState(initialFormValues.password);
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -40,7 +43,7 @@ export const Profile = (): React.JSX.Element => {
   };
 
   const handleLogout = (): void => {
-    console.log('Logout');
+    void dispatch(logoutThunk());
   };
 
   const hasChanges = useMemo(() => {

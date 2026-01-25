@@ -5,6 +5,7 @@ import {
   checkUserAuthThunk,
   getUserThunk,
   loginThunk,
+  logoutThunk,
   refreshTokenThunk,
   registerThunk,
 } from './actions';
@@ -39,6 +40,17 @@ const initialState: AuthState = {
   isAuthChecked: false,
 };
 
+const clearAuthReducer = (state: AuthState): void => {
+  state.user = null;
+  state.accessToken = null;
+  state.refreshToken = null;
+  state.authSuccess = false;
+  state.error = null;
+  tokenStorage.removeRefreshToken();
+
+  return;
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -47,14 +59,7 @@ const authSlice = createSlice({
       state.authSuccess = false;
       state.error = null;
     },
-    clearAuth: (state) => {
-      state.user = null;
-      state.accessToken = null;
-      state.refreshToken = null;
-      state.authSuccess = false;
-      state.error = null;
-      tokenStorage.removeRefreshToken();
-    },
+    clearAuth: clearAuthReducer,
     updateTokens: (
       state,
       {
@@ -120,6 +125,7 @@ const authSlice = createSlice({
       state.error = action.error.message ?? 'Failed to login';
       state.authSuccess = false;
     });
+
     builder.addCase(
       refreshTokenThunk.fulfilled,
       (
@@ -131,12 +137,14 @@ const authSlice = createSlice({
         tokenStorage.setRefreshToken(refreshToken);
       }
     );
+
     builder.addCase(
       getUserThunk.fulfilled,
       (state, { payload: { user } }: PayloadAction<GetUserResponse>) => {
         state.user = user;
       }
     );
+
     builder.addCase(checkUserAuthThunk.pending, (state) => {
       state.isAuthChecked = false;
     });
@@ -146,6 +154,9 @@ const authSlice = createSlice({
     builder.addCase(checkUserAuthThunk.rejected, (state) => {
       state.isAuthChecked = true;
     });
+
+    builder.addCase(logoutThunk.fulfilled, clearAuthReducer);
+    builder.addCase(logoutThunk.rejected, clearAuthReducer);
   },
 });
 

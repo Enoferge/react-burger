@@ -14,7 +14,8 @@ import { Route, Routes, useLocation, type Location } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
 
-import { ACCESS_TYPE, ProtectedRoute } from '../protected-route/protected-route';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import { ACCESS_TYPE } from '../protected-route/protected-route.constants';
 
 import styles from './app.module.css';
 

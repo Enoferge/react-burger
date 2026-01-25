@@ -2,19 +2,13 @@ import { useAppSelector } from '@/hooks/use-redux-hooks';
 import { ROUTES } from '@/pages/constants';
 import { Navigate, useLocation } from 'react-router-dom';
 
+import { ACCESS_TYPE, type AccessType } from './protected-route.constants';
+
 import type { ReactNode } from 'react';
 
 type LocationState = {
   from?: { pathname: string };
 };
-
-export const ACCESS_TYPE = {
-  ANY: 'any',
-  AUTH: 'auth',
-  GUEST: 'guest',
-} as const;
-
-export type AccessType = (typeof ACCESS_TYPE)[keyof typeof ACCESS_TYPE];
 
 export const ProtectedRoute = ({
   access = ACCESS_TYPE.ANY,

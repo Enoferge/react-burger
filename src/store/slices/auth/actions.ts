@@ -6,6 +6,7 @@ import {
   type RegisterRequest,
   refreshToken,
   type GetUserResponse,
+  logout,
 } from '@/api/auth';
 import { createAuthenticatedThunk } from '@/utils/create-authenticated-thunk';
 import { tokenStorage } from '@/utils/token-storage';
@@ -91,5 +92,17 @@ export const checkUserAuthThunk = createAsyncThunk<
     return userData;
   } catch {
     return null;
+  }
+});
+
+export const logoutThunk = createAsyncThunk<void, void>('auth/logout', async () => {
+  const refreshTokenValue = tokenStorage.getRefreshToken();
+
+  if (refreshTokenValue) {
+    try {
+      await logout({ token: refreshTokenValue });
+    } catch {
+      return;
+    }
   }
 });
