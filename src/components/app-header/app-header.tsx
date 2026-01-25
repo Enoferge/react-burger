@@ -5,7 +5,9 @@ import {
   Logo,
   ProfileIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+import { getNavLinkClassName } from './app-header.utils';
 
 import styles from './app-header.module.css';
 
@@ -14,25 +16,25 @@ export const AppHeader = (): React.JSX.Element => {
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
         <div className={styles.menu_part_left}>
-          <Link to={ROUTES.HOME} className={`${styles.link} ${styles.link_active}`}>
+          <NavLink to={ROUTES.HOME} className={getNavLinkClassName()}>
             <BurgerIcon type="primary" />
             <p className="text text_type_main-default ml-2">Конструктор</p>
-          </Link>
-          <a href="/feed" className={`${styles.link} ml-10`}>
+          </NavLink>
+          <NavLink to={ROUTES.FEED} className={getNavLinkClassName('ml-10')}>
             <ListIcon type="secondary" />
             <p className="text text_type_main-default ml-2">Лента заказов</p>
-          </a>
+          </NavLink>
         </div>
         <div className={styles.logo}>
           <Logo />
         </div>
-        <Link
+        <NavLink
           to={ROUTES.PROFILE}
-          className={`${styles.link} ${styles.link_position_last}`}
+          className={getNavLinkClassName(styles.link_position_last)}
         >
           <ProfileIcon type="secondary" />
           <p className="text text_type_main-default ml-2">Личный кабинет</p>
-        </Link>
+        </NavLink>
       </nav>
     </header>
   );
