@@ -7,6 +7,9 @@ import {
   refreshToken,
   type GetUserResponse,
   logout,
+  editUserProfile,
+  type EditUserProfileResponse,
+  type EditUserProfileRequest,
 } from '@/api/auth';
 import { createAuthenticatedThunk } from '@/utils/create-authenticated-thunk';
 import { tokenStorage } from '@/utils/token-storage';
@@ -106,3 +109,8 @@ export const logoutThunk = createAsyncThunk<void, void>('auth/logout', async () 
     }
   }
 });
+
+export const editUserProfileThunk = createAuthenticatedThunk<
+  EditUserProfileResponse,
+  EditUserProfileRequest
+>('auth/editUser', editUserProfile);

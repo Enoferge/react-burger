@@ -1,45 +1,67 @@
 import { PageLayout } from '@/components/page-layout/page-layout';
 import { TextInput } from '@/components/text-input/text-input';
-import { useAppDispatch } from '@/hooks/use-redux-hooks';
-import { logoutThunk } from '@/store/slices/auth/actions';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { editUserProfileThunk, logoutThunk } from '@/store/slices/auth/actions';
 import {
   Button,
   EmailInput,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
+import type { EditUserProfileRequest, User } from '@/api/auth';
+
 import styles from './profile.module.css';
 
-const initialFormValues = {
-  name: 'Марк',
-  email: 'mail@stellar.burger',
-  password: '12345',
-};
-
 export const Profile = (): React.JSX.Element => {
-  const [name, setName] = useState(initialFormValues.name);
-  const [email, setEmail] = useState(initialFormValues.email);
-  const [password, setPassword] = useState(initialFormValues.password);
+  const { user, isEditInProgress } = useAppSelector((state) => state.auth);
   const location = useLocation();
   const dispatch = useAppDispatch();
 
+  const [innerUser, setInnerUser] = useState<User | null>(user);
+  const [password, setPassword] = useState<string>('');
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setInnerUser(user);
+      setPassword('');
+    }
+  }, [user]);
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log({
-      name,
-      email,
-      password: password || undefined,
-    });
+    if (!innerUser || !user) {
+      return;
+    }
+
+    const payload: EditUserProfileRequest = {};
+
+    if (innerUser.name !== user.name) {
+      payload.name = innerUser.name;
+    }
+
+    if (innerUser.email !== user.email) {
+      payload.email = innerUser.email;
+    }
+
+    if (password.trim().length > 0) {
+      payload.password = password;
+    }
+
+    if (Object.keys(payload).length > 0) {
+      void dispatch(editUserProfileThunk(payload));
+    }
   };
 
   const handleCancel = (): void => {
-    setName(initialFormValues.name);
-    setEmail(initialFormValues.email);
-    setPassword(initialFormValues.password);
+    if (user) {
+      setInnerUser(user);
+      setPassword('');
+    }
   };
 
   const handleLogout = (): void => {
@@ -48,11 +70,12 @@ export const Profile = (): React.JSX.Element => {
 
   const hasChanges = useMemo(() => {
     return (
-      name !== initialFormValues.name ||
-      email !== initialFormValues.email ||
-      password !== initialFormValues.password
+      innerUser?.name !== user?.name ||
+      innerUser?.email !== user?.email ||
+      password?.length
     );
-  }, [name, email, password]);
+  }, [innerUser, user, password]);
+
   const isProfileActive = location.pathname === ROUTES.PROFILE;
 
   return (
@@ -88,20 +111,24 @@ export const Profile = (): React.JSX.Element => {
         <form onSubmit={handleSubmit} className={styles.form}>
           <TextInput
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setName(e.target.value);
+              if (innerUser) {
+                setInnerUser({ ...innerUser, name: e.target.value });
+              }
             }}
-            value={name}
+            value={innerUser?.name ?? ''}
             name={'name'}
             placeholder="Имя"
             isIcon
           />
           <EmailInput
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
+              if (innerUser) {
+                setInnerUser({ ...innerUser, email: e.target.value });
+              }
             }}
-            value={email}
+            value={innerUser?.email ?? ''}
             name={'email'}
-            placeholder="Логин"
+            placeholder="E-mail"
             isIcon
             extraClass="mt-6"
           />
@@ -114,8 +141,12 @@ export const Profile = (): React.JSX.Element => {
             placeholder="Пароль"
             extraClass="mt-6"
             icon="EditIcon"
+            onInvalid={() => {
+              console.log('error');
+              setIsSubmitDisabled(true);
+            }}
           />
-          {hasChanges && (
+          {!!hasChanges && (
             <div className={`${styles.buttons} mt-6`}>
               <Button
                 htmlType="button"
@@ -131,8 +162,9 @@ export const Profile = (): React.JSX.Element => {
                 type="primary"
                 size="medium"
                 extraClass="mt-6 ml-4"
+                disabled={isSubmitDisabled}
               >
-                Сохранить
+                {isEditInProgress ? 'Сохраняем...' : 'Сохранить'}
               </Button>
             </div>
           )}

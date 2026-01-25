@@ -3,6 +3,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import {
   checkUserAuthThunk,
+  editUserProfileThunk,
   getUserThunk,
   loginThunk,
   logoutThunk,
@@ -11,6 +12,7 @@ import {
 } from './actions';
 
 import type {
+  EditUserProfileResponse,
   GetUserResponse,
   LoginResponse,
   RefreshTokenResponse,
@@ -26,6 +28,8 @@ type AuthState = {
   error: string | null;
   authSuccess: boolean;
   isAuthChecked: boolean;
+  isEditInProgress: boolean;
+  editError: string | null;
 };
 
 const savedRefreshToken = tokenStorage.getRefreshToken();
@@ -38,6 +42,8 @@ const initialState: AuthState = {
   error: null,
   authSuccess: false,
   isAuthChecked: false,
+  isEditInProgress: false,
+  editError: null,
 };
 
 const clearAuthReducer = (state: AuthState): void => {
@@ -157,6 +163,23 @@ const authSlice = createSlice({
 
     builder.addCase(logoutThunk.fulfilled, clearAuthReducer);
     builder.addCase(logoutThunk.rejected, clearAuthReducer);
+
+    builder.addCase(editUserProfileThunk.pending, (state) => {
+      state.isEditInProgress = true;
+      state.editError = null;
+    });
+    builder.addCase(
+      editUserProfileThunk.fulfilled,
+      (state, { payload }: PayloadAction<EditUserProfileResponse>) => {
+        state.user = payload.user;
+        state.isEditInProgress = false;
+        state.editError = null;
+      }
+    );
+    builder.addCase(editUserProfileThunk.rejected, (state, { error }) => {
+      state.isEditInProgress = false;
+      state.editError = error?.message ?? 'Failed to edit user profile';
+    });
   },
 });
 

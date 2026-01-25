@@ -47,6 +47,16 @@ export type RefreshTokenResponse = {
   refreshToken: string;
 };
 
+export type EditUserProfileResponse = {
+  user: User;
+};
+
+export type EditUserProfileRequest = {
+  email?: string;
+  name?: string;
+  password?: string;
+};
+
 export async function register(data: RegisterRequest): Promise<RegisterResponse> {
   return await fetchApi<RegisterResponse>('/auth/register', {
     method: 'POST',
@@ -96,5 +106,17 @@ export type GetUserResponse = {
 export async function getUser(): Promise<GetUserResponse> {
   return await fetchApi<GetUserResponse>('/auth/user', {
     method: 'GET',
+  });
+}
+
+export async function editUserProfile(
+  data: EditUserProfileRequest
+): Promise<EditUserProfileResponse> {
+  return await fetchApi<EditUserProfileResponse>('/auth/user', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   });
 }
