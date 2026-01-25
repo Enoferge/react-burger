@@ -4,15 +4,20 @@ import { AuthForm } from '@/pages/auth-form/auth-form';
 import { confirmPasswordResetThunk } from '@/store/slices/password-reset/actions';
 import { PasswordInput } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
+
+type ResetPasswordLocationState = {
+  allowReset?: boolean;
+};
 
 export const ResetPassword = (): React.JSX.Element => {
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isLoading, resetConfirmSuccess, error } = useAppSelector(
     (state) => state.passwordReset
   );
@@ -34,6 +39,12 @@ export const ResetPassword = (): React.JSX.Element => {
       );
     }
   };
+
+  const locationState = location.state as ResetPasswordLocationState | null;
+
+  if (!locationState?.allowReset) {
+    return <Navigate to={ROUTES.FORGOT_PASSWORD} replace />;
+  }
 
   return (
     <AuthForm

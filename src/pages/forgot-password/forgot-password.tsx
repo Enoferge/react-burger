@@ -17,7 +17,7 @@ export const ForgotPassword = (): React.JSX.Element => {
 
   useEffect(() => {
     if (resetRequestSuccess) {
-      void navigate(ROUTES.RESET_PASSWORD);
+      void navigate(ROUTES.RESET_PASSWORD, { state: { allowReset: true } });
     }
   }, [resetRequestSuccess, navigate]);
 
