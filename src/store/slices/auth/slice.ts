@@ -1,9 +1,16 @@
 import { tokenStorage } from '@/utils/token-storage';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { loginThunk, refreshTokenThunk, registerThunk } from './actions';
+import {
+  checkUserAuthThunk,
+  getUserThunk,
+  loginThunk,
+  refreshTokenThunk,
+  registerThunk,
+} from './actions';
 
 import type {
+  GetUserResponse,
   LoginResponse,
   RefreshTokenResponse,
   RegisterResponse,
@@ -17,6 +24,7 @@ type AuthState = {
   isLoading: boolean;
   error: string | null;
   authSuccess: boolean;
+  isAuthChecked: boolean;
 };
 
 const savedRefreshToken = tokenStorage.getRefreshToken();
@@ -28,6 +36,7 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   authSuccess: false,
+  isAuthChecked: false,
 };
 
 const authSlice = createSlice({
@@ -55,6 +64,9 @@ const authSlice = createSlice({
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       tokenStorage.setRefreshToken(refreshToken);
+    },
+    setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
+      state.isAuthChecked = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -119,6 +131,21 @@ const authSlice = createSlice({
         tokenStorage.setRefreshToken(refreshToken);
       }
     );
+    builder.addCase(
+      getUserThunk.fulfilled,
+      (state, { payload: { user } }: PayloadAction<GetUserResponse>) => {
+        state.user = user;
+      }
+    );
+    builder.addCase(checkUserAuthThunk.pending, (state) => {
+      state.isAuthChecked = false;
+    });
+    builder.addCase(checkUserAuthThunk.fulfilled, (state) => {
+      state.isAuthChecked = true;
+    });
+    builder.addCase(checkUserAuthThunk.rejected, (state) => {
+      state.isAuthChecked = true;
+    });
   },
 });
 

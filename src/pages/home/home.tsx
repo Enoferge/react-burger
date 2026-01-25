@@ -1,4 +1,6 @@
-import { useAppSelector } from '@/hooks/use-redux-hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
+import { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -9,6 +11,11 @@ import styles from './home.module.css';
 
 export const Home = (): React.JSX.Element => {
   const { isLoading } = useAppSelector((state) => state.ingredients);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    void dispatch(fetchIngredientsThunk());
+  }, [dispatch]);
 
   return (
     <>

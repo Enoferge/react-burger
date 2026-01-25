@@ -70,3 +70,13 @@ export async function refreshToken(
     body: JSON.stringify(data),
   });
 }
+
+export type GetUserResponse = {
+  user: User;
+};
+
+export async function getUser(): Promise<GetUserResponse> {
+  return await fetchApi<GetUserResponse>('/auth/user', {
+    method: 'GET',
+  });
+}

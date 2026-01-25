@@ -1,12 +1,17 @@
 import {
   register,
   login,
+  getUser,
   type LoginRequest,
   type RegisterRequest,
   refreshToken,
+  type GetUserResponse,
 } from '@/api/auth';
+import { createAuthenticatedThunk } from '@/utils/create-authenticated-thunk';
 import { tokenStorage } from '@/utils/token-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import type { AppDispatch, RootState } from '@/store';
 
 let refreshPromise: Promise<{ accessToken: string; refreshToken: string }> | null = null;
 
@@ -63,3 +68,28 @@ export const refreshTokenThunk = createAsyncThunk(
     }
   }
 );
+
+export const getUserThunk = createAuthenticatedThunk<GetUserResponse, void>(
+  'auth/getUser',
+  getUser
+);
+
+export const checkUserAuthThunk = createAsyncThunk<
+  GetUserResponse | null,
+  void,
+  { state: RootState; dispatch: AppDispatch }
+>('auth/checkUserAuth', async (_, { dispatch }) => {
+  const refreshTokenValue = tokenStorage.getRefreshToken();
+
+  if (!refreshTokenValue) {
+    return null;
+  }
+
+  try {
+    await dispatch(refreshTokenThunk()).unwrap();
+    const userData = await dispatch(getUserThunk()).unwrap();
+    return userData;
+  } catch {
+    return null;
+  }
+});

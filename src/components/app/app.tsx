@@ -8,11 +8,13 @@ import { Login } from '@/pages/login/login';
 import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
 import { ResetPassword } from '@/pages/reset-password/reset-password';
-import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
+import { checkUserAuthThunk } from '@/store/slices/auth/actions';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, type Location } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
+
+import { ACCESS_TYPE, ProtectedRoute } from '../protected-route/protected-route';
 
 import styles from './app.module.css';
 
@@ -23,20 +25,69 @@ export const App = (): React.JSX.Element => {
     ?.background;
 
   useEffect(() => {
-    void dispatch(fetchIngredientsThunk());
+    void dispatch(checkUserAuthThunk());
   }, [dispatch]);
 
   return (
     <div className={styles.app}>
       <AppHeader />
       <Routes location={backgroundLocation ?? location}>
-        <Route path={ROUTES.HOME} element={<Home />} />
-        <Route path="/ingredients/:id" element={<Ingredient />} />
-        <Route path={ROUTES.LOGIN} element={<Login />} />
-        <Route path={ROUTES.REGISTER} element={<Register />} />
-        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-        <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
-        <Route path={ROUTES.PROFILE} element={<Profile />} />
+        <Route
+          path={ROUTES.HOME}
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ingredients/:id"
+          element={
+            <ProtectedRoute>
+              <Ingredient />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.LOGIN}
+          element={
+            <ProtectedRoute access={ACCESS_TYPE.GUEST}>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.REGISTER}
+          element={
+            <ProtectedRoute access={ACCESS_TYPE.GUEST}>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          element={
+            <ProtectedRoute>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.RESET_PASSWORD}
+          element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.PROFILE}
+          element={
+            <ProtectedRoute access={ACCESS_TYPE.AUTH}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {backgroundLocation && (
