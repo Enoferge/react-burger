@@ -11,7 +11,7 @@ type TUseCreateOrderProps = {
 };
 
 type TUseCreateOrderResult = TOrderSliceState & {
-  handleCreateOrder: () => void;
+  createOrder: () => void;
 };
 
 export const useCreateOrder = ({
@@ -24,7 +24,7 @@ export const useCreateOrder = ({
 
   const previousOrderNumberRef = useRef<number | null>(null);
 
-  const handleCreateOrder = (): void => {
+  const createOrder = (): void => {
     if (!bun?._id) {
       return;
     }
@@ -49,5 +49,5 @@ export const useCreateOrder = ({
     }
   }, [order?.number, isCreating, onCreationSuccess, dispatch]);
 
-  return { order, name, isCreating, handleCreateOrder };
+  return { order, name, isCreating, createOrder };
 };
