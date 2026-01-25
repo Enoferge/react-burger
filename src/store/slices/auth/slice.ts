@@ -52,9 +52,6 @@ const clearAuthReducer = (state: AuthState): void => {
   state.refreshToken = null;
   state.authSuccess = false;
   state.error = null;
-  tokenStorage.removeRefreshToken();
-
-  return;
 };
 
 const authSlice = createSlice({
@@ -66,16 +63,6 @@ const authSlice = createSlice({
       state.error = null;
     },
     clearAuth: clearAuthReducer,
-    updateTokens: (
-      state,
-      {
-        payload: { accessToken, refreshToken },
-      }: PayloadAction<{ accessToken: string; refreshToken: string }>
-    ) => {
-      state.accessToken = accessToken;
-      state.refreshToken = refreshToken;
-      tokenStorage.setRefreshToken(refreshToken);
-    },
     setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
     },
@@ -97,7 +84,6 @@ const authSlice = createSlice({
         state.user = user;
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
-        tokenStorage.setRefreshToken(refreshToken);
       }
     );
     builder.addCase(registerThunk.rejected, (state, action) => {
@@ -123,7 +109,6 @@ const authSlice = createSlice({
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
         state.user = user;
-        tokenStorage.setRefreshToken(refreshToken);
       }
     );
     builder.addCase(loginThunk.rejected, (state, action) => {
@@ -140,7 +125,6 @@ const authSlice = createSlice({
       ) => {
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
-        tokenStorage.setRefreshToken(refreshToken);
       }
     );
 
@@ -183,5 +167,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetAuthState, clearAuth, updateTokens } = authSlice.actions;
+export const { resetAuthState, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

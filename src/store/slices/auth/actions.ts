@@ -22,30 +22,29 @@ let refreshPromise: Promise<{ accessToken: string; refreshToken: string }> | nul
 export const registerThunk = createAsyncThunk(
   'auth/register',
   async (payload: RegisterRequest) => {
-    return await register(payload);
+    const result = await register(payload);
+
+    tokenStorage.setRefreshToken(result.refreshToken);
+
+    return result;
   }
 );
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
   async (payload: LoginRequest) => {
-    return await login(payload);
+    const result = await login(payload);
+
+    tokenStorage.setRefreshToken(result.refreshToken);
+
+    return result;
   }
 );
 
 export const refreshTokenThunk = createAsyncThunk(
   'auth/refreshToken',
   async (_, { rejectWithValue }) => {
-    if (refreshPromise) {
-      try {
-        return await refreshPromise;
-      } catch (error) {
-        refreshPromise = null;
-        throw error;
-      }
-    }
-
-    refreshPromise = (async (): Promise<{
+    refreshPromise ??= (async (): Promise<{
       accessToken: string;
       refreshToken: string;
     }> => {
@@ -56,6 +55,7 @@ export const refreshTokenThunk = createAsyncThunk(
 
       try {
         const result = await refreshToken({ token: refreshTokenValue });
+        tokenStorage.setRefreshToken(result.refreshToken);
         return result;
       } finally {
         refreshPromise = null;
@@ -108,6 +108,8 @@ export const logoutThunk = createAsyncThunk<void, void>('auth/logout', async () 
       return;
     }
   }
+
+  tokenStorage.removeRefreshToken();
 });
 
 export const editUserProfileThunk = createAuthenticatedThunk<
