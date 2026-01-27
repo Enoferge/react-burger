@@ -1,6 +1,7 @@
 import { Price } from '@/components/price/price';
 import { useCreateOrder } from '@/hooks/use-create-order';
 import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { ROUTES } from '@/pages/constants';
 import {
   removeIngredient as removeIngredientAction,
   clearConstructor,
@@ -9,6 +10,7 @@ import {
 import { clearOrder } from '@/store/slices/order/slice';
 import { Button } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
@@ -21,8 +23,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
   const [isOrderDetailsModalOpened, setIsOrderDetailsModalOpened] = useState(false);
+  const { user, isAuthChecked } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  const { order, isCreating, handleCreateOrder } = useCreateOrder({
+  const { order, isCreating, createOrder } = useCreateOrder({
     onCreationSuccess: () => setIsOrderDetailsModalOpened(true),
   });
 
@@ -34,6 +38,19 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
   const removeIngredient = (ingredient: TConstructorIngredient): void => {
     dispatch(removeIngredientAction({ uniqueId: ingredient.uniqueId }));
+  };
+
+  const handleCreateOrder = (): void => {
+    if (!isAuthChecked) {
+      return;
+    }
+
+    if (!user) {
+      void navigate(ROUTES.LOGIN);
+      return;
+    }
+
+    createOrder();
   };
 
   return (

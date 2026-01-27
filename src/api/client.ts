@@ -1,32 +1,71 @@
+import { HttpError } from '@/utils/http-error';
+
+import { tokenContext } from './token-context';
+
 export const BASE_API_URL = 'https://norma.education-services.ru/api';
 
 type ApiResponse<T> = {
   success: boolean;
 } & T;
 
+type ApiErrorResponse = {
+  success: false;
+  message?: string;
+};
+
 export default async function fetchApi<T>(
   url: string,
-  options?: RequestInit
+  options?: RequestInit,
+  accessToken?: string | null
 ): Promise<T> {
-  try {
-    const response = await fetch(`${BASE_API_URL}${url}`, options);
+  const headers = new Headers(options?.headers);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
-    }
-
-    const result = (await response.json()) as unknown as ApiResponse<T>;
-
-    if (!result.success) {
-      throw new Error('API returned success: false');
-    }
-
-    const { success: _success, ...rest } = result;
-
-    return rest as T;
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`API error: ${errorMessage}`);
-    throw error;
+  const token = accessToken ?? tokenContext.get();
+  if (token) {
+    headers.set('authorization', token);
   }
+
+  const response = await fetch(`${BASE_API_URL}${url}`, {
+    ...options,
+    headers,
+  });
+
+  let result: unknown;
+  try {
+    result = await response.json();
+  } catch (_jsonError) {
+    if (!response.ok) {
+      throw new HttpError(
+        `HTTP error: ${response.status} ${response.statusText}`,
+        response.status,
+        response.statusText
+      );
+    }
+    throw new HttpError('Failed to parse response as JSON', response.status);
+  }
+
+  if (!response.ok) {
+    const errorMessage =
+      result &&
+      typeof result === 'object' &&
+      'message' in result &&
+      typeof result.message === 'string'
+        ? result.message
+        : `HTTP error: ${response.status} ${response.statusText}`;
+    throw new HttpError(errorMessage, response.status, response.statusText);
+  }
+
+  const apiResult = result as ApiResponse<T> | ApiErrorResponse;
+
+  if (!apiResult.success) {
+    const errorMessage =
+      'message' in apiResult && apiResult.message
+        ? apiResult.message
+        : 'API returned success: false';
+    throw new HttpError(errorMessage, response.status);
+  }
+
+  const { success: _success, ...rest } = apiResult;
+
+  return rest as T;
 }

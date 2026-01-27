@@ -1,12 +1,9 @@
-import { createOrder } from '@/api/order';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createOrder, type TCreateOrderResponse } from '@/api/order';
+import { createAuthenticatedThunk } from '@/utils/create-authenticated-thunk';
 
 import type { TIngredient } from '@/utils/types';
 
-export const createOrderThunk = createAsyncThunk(
-  'order/createOrder',
-  async (ingredientIds: TIngredient['_id'][]) => {
-    const data = await createOrder(ingredientIds);
-    return data;
-  }
-);
+export const createOrderThunk = createAuthenticatedThunk<
+  TCreateOrderResponse,
+  TIngredient['_id'][]
+>('order/createOrder', createOrder);

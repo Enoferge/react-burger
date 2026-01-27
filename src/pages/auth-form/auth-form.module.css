@@ -1,0 +1,30 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  align-self: center;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--offset-base-size) * 4);
+  color: var(--text-inactive-color);
+}
+
+.link {
+  color: var(--colors-interface-accent);
+  text-decoration: none;
+}
