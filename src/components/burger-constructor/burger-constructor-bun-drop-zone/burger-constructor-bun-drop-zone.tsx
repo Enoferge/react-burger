@@ -3,7 +3,7 @@ import { setBun } from '@/store/slices/burger-constructor/slice';
 import { useDrop } from 'react-dnd';
 
 import { BurgerConstructorEmptyElement } from '../burger-constructor-empty-element/burger-constructor-empty-element';
-import { BurgerConstructorItem } from '../burger-constuctor-item/burger-constructor-item';
+import { BurgerConstructorItem } from '../burger-constructor-item/burger-constructor-item';
 
 import type { TIngredient } from '@/utils/types';
 import type { Ref } from 'react';

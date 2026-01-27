@@ -8,7 +8,7 @@ import styles from './modal.module.css';
 
 const modalRoot = document.getElementById('modals-root');
 
-type ModalProps = {
+type TModalProps = {
   title?: string;
   children: React.ReactNode;
   onClose: () => void;
@@ -18,7 +18,7 @@ export const Modal = ({
   title,
   children,
   onClose,
-}: ModalProps): React.JSX.Element | null => {
+}: TModalProps): React.JSX.Element | null => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {

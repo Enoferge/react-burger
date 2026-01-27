@@ -3,16 +3,16 @@ import { useAppSelector } from '@/hooks/use-redux-hooks';
 import { ROUTES } from '@/pages/constants';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { ACCESS_TYPE, type AccessType } from './protected-route.constants';
+import { ACCESS_TYPE, type TAccessType } from './protected-route.constants';
 
-import type { LocationState } from '@/types';
+import type { TLocationState } from '@/types';
 import type { ReactNode } from 'react';
 
 export const ProtectedRoute = ({
   access = ACCESS_TYPE.ANY,
   children,
 }: {
-  access?: AccessType;
+  access?: TAccessType;
   children: ReactNode;
 }): React.JSX.Element => {
   const location = useLocation();
@@ -27,7 +27,7 @@ export const ProtectedRoute = ({
   }
 
   if (access === ACCESS_TYPE.GUEST && user) {
-    const from = (location.state as LocationState | null)?.from ?? {
+    const from = (location.state as TLocationState | null)?.from ?? {
       pathname: ROUTES.HOME,
     };
     return <Navigate to={from} />;

@@ -23,7 +23,7 @@ type TBurgerConstructorItemProps = {
   moveIngredient?: (dragIndex: number, hoverIndex: number) => void;
 };
 
-type DragItem = {
+type TDragItem = {
   id: string;
   index: number;
 };
@@ -47,7 +47,7 @@ export const BurgerConstructorItem = ({
   const isDraggable = moveIngredient !== undefined && index !== undefined;
 
   const [{ handlerId }, drop] = useDrop<
-    DragItem,
+    TDragItem,
     void,
     { handlerId: string | symbol | null }
   >({
@@ -57,7 +57,7 @@ export const BurgerConstructorItem = ({
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item: DragItem, monitor) {
+    hover(item: TDragItem, monitor) {
       if (!ref.current || !moveIngredient || index === undefined) {
         return;
       }
@@ -90,13 +90,13 @@ export const BurgerConstructorItem = ({
     canDrop: () => isDraggable,
   });
 
-  const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>({
+  const [{ isDragging }, drag] = useDrag<TDragItem, void, { isDragging: boolean }>({
     type: 'item',
     item: () => {
       const uniqueId = 'uniqueId' in ingredient ? ingredient.uniqueId : ingredient._id;
       return { id: uniqueId, index: index ?? 0 };
     },
-    collect: (monitor: DragSourceMonitor<DragItem, void>) => ({
+    collect: (monitor: DragSourceMonitor<TDragItem, void>) => ({
       isDragging: monitor.isDragging(),
     }),
     canDrag: () => isDraggable,

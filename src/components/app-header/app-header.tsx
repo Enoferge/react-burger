@@ -7,9 +7,16 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 
-import { getNavLinkClassName } from './app-header.utils';
-
 import styles from './app-header.module.css';
+
+const getNavLinkClassName =
+  (baseClassName?: string) =>
+  ({ isActive }: { isActive: boolean }): string => {
+    const classes: string[] = [styles.link];
+    if (isActive) classes.push(styles.link_active);
+    if (baseClassName) classes.push(baseClassName);
+    return classes.join(' ');
+  };
 
 export const AppHeader = (): React.JSX.Element => {
   return (

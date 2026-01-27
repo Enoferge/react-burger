@@ -1,27 +1,27 @@
 import fetchApi from './client';
 
-type PasswordResetRequest = {
+type TPasswordResetRequest = {
   email: string;
 };
 
-type PasswordResetResponse = {
+type TPasswordResetResponse = {
   message: string;
 };
 
-type PasswordResetConfirmRequest = {
+type TPasswordResetConfirmRequest = {
   password: string;
   token: string;
 };
 
-type PasswordResetConfirmResponse = {
+type TPasswordResetConfirmResponse = {
   message: string;
 };
 
 export async function requestPasswordReset(
   email: string
-): Promise<PasswordResetResponse> {
-  const body: PasswordResetRequest = { email };
-  return await fetchApi<PasswordResetResponse>('/password-reset', {
+): Promise<TPasswordResetResponse> {
+  const body: TPasswordResetRequest = { email };
+  return await fetchApi<TPasswordResetResponse>('/password-reset', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,9 +33,9 @@ export async function requestPasswordReset(
 export async function confirmPasswordReset(
   password: string,
   token: string
-): Promise<PasswordResetConfirmResponse> {
-  const body: PasswordResetConfirmRequest = { password, token };
-  return await fetchApi<PasswordResetConfirmResponse>('/password-reset/reset', {
+): Promise<TPasswordResetConfirmResponse> {
+  const body: TPasswordResetConfirmRequest = { password, token };
+  return await fetchApi<TPasswordResetConfirmResponse>('/password-reset/reset', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

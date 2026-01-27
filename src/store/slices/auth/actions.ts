@@ -2,26 +2,26 @@ import {
   register,
   login,
   getUser,
-  type LoginRequest,
-  type RegisterRequest,
+  type TLoginRequest,
+  type TRegisterRequest,
   refreshToken,
-  type GetUserResponse,
+  type TGetUserResponse,
   logout,
   editUserProfile,
-  type EditUserProfileResponse,
-  type EditUserProfileRequest,
+  type TEditUserProfileResponse,
+  type TEditUserProfileRequest,
 } from '@/api/auth';
 import { createAuthenticatedThunk } from '@/utils/create-authenticated-thunk';
 import { tokenStorage } from '@/utils/token-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import type { AppDispatch, RootState } from '@/store';
+import type { TAppDispatch, TRootState } from '@/store';
 
 let refreshPromise: Promise<{ accessToken: string; refreshToken: string }> | null = null;
 
 export const registerThunk = createAsyncThunk(
   'auth/register',
-  async (payload: RegisterRequest) => {
+  async (payload: TRegisterRequest) => {
     const result = await register(payload);
 
     tokenStorage.setRefreshToken(result.refreshToken);
@@ -32,7 +32,7 @@ export const registerThunk = createAsyncThunk(
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
-  async (payload: LoginRequest) => {
+  async (payload: TLoginRequest) => {
     const result = await login(payload);
 
     tokenStorage.setRefreshToken(result.refreshToken);
@@ -73,15 +73,15 @@ export const refreshTokenThunk = createAsyncThunk(
   }
 );
 
-export const getUserThunk = createAuthenticatedThunk<GetUserResponse, void>(
+export const getUserThunk = createAuthenticatedThunk<TGetUserResponse, void>(
   'auth/getUser',
   getUser
 );
 
 export const checkUserAuthThunk = createAsyncThunk<
-  GetUserResponse | null,
+  TGetUserResponse | null,
   void,
-  { state: RootState; dispatch: AppDispatch }
+  { state: TRootState; dispatch: TAppDispatch }
 >('auth/checkUserAuth', async (_, { dispatch }) => {
   const refreshTokenValue = tokenStorage.getRefreshToken();
 
@@ -113,6 +113,6 @@ export const logoutThunk = createAsyncThunk<void, void>('auth/logout', async () 
 });
 
 export const editUserProfileThunk = createAuthenticatedThunk<
-  EditUserProfileResponse,
-  EditUserProfileRequest
+  TEditUserProfileResponse,
+  TEditUserProfileRequest
 >('auth/editUser', editUserProfile);

@@ -12,7 +12,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
-import type { EditUserProfileRequest, User } from '@/api/auth';
+import type { TEditUserProfileRequest, TUser } from '@/api/auth';
 
 import styles from './profile.module.css';
 
@@ -21,7 +21,7 @@ export const Profile = (): React.JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [innerUser, setInnerUser] = useState<User | null>(user);
+  const [innerUser, setInnerUser] = useState<TUser | null>(user);
   const [password, setPassword] = useState<string>('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
@@ -40,7 +40,7 @@ export const Profile = (): React.JSX.Element => {
       return;
     }
 
-    const payload: EditUserProfileRequest = {};
+    const payload: TEditUserProfileRequest = {};
 
     if (innerUser.name !== user.name) {
       payload.name = innerUser.name;
