@@ -4,11 +4,11 @@ import { tokenContext } from './token-context';
 
 export const BASE_API_URL = 'https://norma.education-services.ru/api';
 
-type ApiResponse<T> = {
+type TApiResponse<T> = {
   success: boolean;
 } & T;
 
-type ApiErrorResponse = {
+type TApiErrorResponse = {
   success: false;
   message?: string;
 };
@@ -55,7 +55,7 @@ export default async function fetchApi<T>(
     throw new HttpError(errorMessage, response.status, response.statusText);
   }
 
-  const apiResult = result as ApiResponse<T> | ApiErrorResponse;
+  const apiResult = result as TApiResponse<T> | TApiErrorResponse;
 
   if (!apiResult.success) {
     const errorMessage =

@@ -1,64 +1,57 @@
 import fetchApi from './client';
 
-export type RegisterRequest = {
-  email: string;
-  password: string;
-  name: string;
-};
-
-export type User = {
+export type TUser = {
   email: string;
   name: string;
 };
 
-export type RegisterResponse = {
-  user: User;
+export type TTokenPair = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type LoginRequest = {
-  email: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-  email: string;
-  name: string;
-};
-
-export type LogoutRequest = {
+export type TTokenRequest = {
   token: string;
 };
 
-export type LogoutResponse = {
+export type TUserResponse = {
+  user: TUser;
+};
+
+export type TRegisterRequest = {
+  email: string;
+  password: string;
+  name: string;
+};
+
+export type TLoginRequest = Pick<TRegisterRequest, 'email' | 'password'>;
+
+export type TLogoutRequest = TTokenRequest;
+
+export type TRefreshTokenRequest = TTokenRequest;
+
+export type TRegisterResponse = TTokenPair & TUserResponse;
+
+export type TLoginResponse = TTokenPair &
+  TUserResponse & {
+    email: string;
+    name: string;
+  };
+
+export type TRefreshTokenResponse = TTokenPair;
+
+export type TLogoutResponse = {
   message: string;
 };
 
-export type RefreshTokenRequest = {
-  token: string;
-};
+export type TEditUserProfileResponse = TUserResponse;
 
-export type RefreshTokenResponse = {
-  accessToken: string;
-  refreshToken: string;
-};
+export type TGetUserResponse = TUserResponse;
 
-export type EditUserProfileResponse = {
-  user: User;
-};
+export type TEditUserProfileRequest = Partial<TRegisterRequest>;
 
-export type EditUserProfileRequest = {
-  email?: string;
-  name?: string;
-  password?: string;
-};
-
-export async function register(data: RegisterRequest): Promise<RegisterResponse> {
-  return await fetchApi<RegisterResponse>('/auth/register', {
+export async function register(data: TRegisterRequest): Promise<TRegisterResponse> {
+  return await fetchApi<TRegisterResponse>('/auth/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -67,8 +60,8 @@ export async function register(data: RegisterRequest): Promise<RegisterResponse>
   });
 }
 
-export async function login(data: LoginRequest): Promise<LoginResponse> {
-  return await fetchApi<LoginResponse>('/auth/login', {
+export async function login(data: TLoginRequest): Promise<TLoginResponse> {
+  return await fetchApi<TLoginResponse>('/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -77,8 +70,8 @@ export async function login(data: LoginRequest): Promise<LoginResponse> {
   });
 }
 
-export async function logout(data: LogoutRequest): Promise<LogoutResponse> {
-  return await fetchApi<LogoutResponse>('/auth/logout', {
+export async function logout(data: TLogoutRequest): Promise<TLogoutResponse> {
+  return await fetchApi<TLogoutResponse>('/auth/logout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -88,9 +81,9 @@ export async function logout(data: LogoutRequest): Promise<LogoutResponse> {
 }
 
 export async function refreshToken(
-  data: RefreshTokenRequest
-): Promise<RefreshTokenResponse> {
-  return await fetchApi<RefreshTokenResponse>('/auth/token', {
+  data: TRefreshTokenRequest
+): Promise<TRefreshTokenResponse> {
+  return await fetchApi<TRefreshTokenResponse>('/auth/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,20 +92,16 @@ export async function refreshToken(
   });
 }
 
-export type GetUserResponse = {
-  user: User;
-};
-
-export async function getUser(): Promise<GetUserResponse> {
-  return await fetchApi<GetUserResponse>('/auth/user', {
+export async function getUser(): Promise<TGetUserResponse> {
+  return await fetchApi<TGetUserResponse>('/auth/user', {
     method: 'GET',
   });
 }
 
 export async function editUserProfile(
-  data: EditUserProfileRequest
-): Promise<EditUserProfileResponse> {
-  return await fetchApi<EditUserProfileResponse>('/auth/user', {
+  data: TEditUserProfileRequest
+): Promise<TEditUserProfileResponse> {
+  return await fetchApi<TEditUserProfileResponse>('/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
-import type { LocationState } from '@/types';
+import type { TLocationState } from '@/types';
 
 export const Login = (): React.JSX.Element => {
   const { values, handleChange } = useForm({ email: '', password: '' });
@@ -17,7 +17,7 @@ export const Login = (): React.JSX.Element => {
   const location = useLocation();
   const { authSuccess, isLoading, error } = useAppSelector((state) => state.auth);
 
-  const from = (location.state as LocationState | null)?.from ?? {
+  const from = (location.state as TLocationState | null)?.from ?? {
     pathname: ROUTES.HOME,
   };
 

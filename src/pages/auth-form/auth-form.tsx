@@ -6,18 +6,18 @@ import type { ReactNode } from 'react';
 
 import styles from './auth-form.module.css';
 
-type AuthLink = {
+type TAuthLink = {
   text: string;
   linkText: string;
   to: string;
 };
 
-type AuthFormProps = {
+type TAuthFormProps = {
   title: string;
   buttonText: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   children: ReactNode;
-  links?: AuthLink[];
+  links?: TAuthLink[];
   error?: string | null;
 };
 
@@ -28,7 +28,7 @@ export const AuthForm = ({
   children,
   links,
   error,
-}: AuthFormProps): React.JSX.Element => {
+}: TAuthFormProps): React.JSX.Element => {
   return (
     <PageLayout>
       <main className={styles.wrapper}>

@@ -1,3 +1,3 @@
-export type LocationState = {
+export type TLocationState = {
   from?: { pathname: string };
 };

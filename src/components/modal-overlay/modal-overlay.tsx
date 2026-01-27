@@ -1,6 +1,6 @@
 import styles from './modal-overlay.module.css';
 
-type ModalOverlayProps = {
+type TModalOverlayProps = {
   children: React.ReactNode;
   onClose?: () => void;
 };
@@ -8,7 +8,7 @@ type ModalOverlayProps = {
 export const ModalOverlay = ({
   children,
   onClose,
-}: ModalOverlayProps): React.JSX.Element | null => {
+}: TModalOverlayProps): React.JSX.Element | null => {
   return (
     <div className={styles.root} onClick={onClose}>
       {children}

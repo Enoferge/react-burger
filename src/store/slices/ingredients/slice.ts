@@ -4,13 +4,13 @@ import { fetchIngredientsThunk } from './actions';
 
 import type { TIngredient } from '@/utils/types';
 
-type State = {
+type TIngredientsState = {
   ingredients: TIngredient[];
   isLoading: boolean;
   error: string | null;
 };
 
-const initialState: State = {
+const initialState: TIngredientsState = {
   ingredients: [],
   isLoading: false,
   error: null,

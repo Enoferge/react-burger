@@ -12,16 +12,16 @@ import {
 } from './actions';
 
 import type {
-  EditUserProfileResponse,
-  GetUserResponse,
-  LoginResponse,
-  RefreshTokenResponse,
-  RegisterResponse,
-  User,
+  TEditUserProfileResponse,
+  TGetUserResponse,
+  TLoginResponse,
+  TRefreshTokenResponse,
+  TRegisterResponse,
+  TUser,
 } from '@/api/auth';
 
-type AuthState = {
-  user: User | null;
+type TAuthState = {
+  user: TUser | null;
   accessToken: string | null;
   refreshToken: string | null;
   isLoading: boolean;
@@ -34,7 +34,7 @@ type AuthState = {
 
 const savedRefreshToken = tokenStorage.getRefreshToken();
 
-const initialState: AuthState = {
+const initialState: TAuthState = {
   user: null,
   accessToken: null,
   refreshToken: savedRefreshToken,
@@ -46,7 +46,7 @@ const initialState: AuthState = {
   editError: null,
 };
 
-const clearAuthReducer = (state: AuthState): void => {
+const clearAuthReducer = (state: TAuthState): void => {
   state.user = null;
   state.accessToken = null;
   state.refreshToken = null;
@@ -77,7 +77,9 @@ const authSlice = createSlice({
       registerThunk.fulfilled,
       (
         state,
-        { payload: { accessToken, refreshToken, user } }: PayloadAction<RegisterResponse>
+        {
+          payload: { accessToken, refreshToken, user },
+        }: PayloadAction<TRegisterResponse>
       ) => {
         state.isLoading = false;
         state.authSuccess = true;
@@ -101,7 +103,7 @@ const authSlice = createSlice({
       loginThunk.fulfilled,
       (
         state,
-        { payload: { accessToken, refreshToken, user } }: PayloadAction<LoginResponse>
+        { payload: { accessToken, refreshToken, user } }: PayloadAction<TLoginResponse>
       ) => {
         state.isLoading = false;
         state.error = null;
@@ -121,7 +123,7 @@ const authSlice = createSlice({
       refreshTokenThunk.fulfilled,
       (
         state,
-        { payload: { accessToken, refreshToken } }: PayloadAction<RefreshTokenResponse>
+        { payload: { accessToken, refreshToken } }: PayloadAction<TRefreshTokenResponse>
       ) => {
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
@@ -130,7 +132,7 @@ const authSlice = createSlice({
 
     builder.addCase(
       getUserThunk.fulfilled,
-      (state, { payload: { user } }: PayloadAction<GetUserResponse>) => {
+      (state, { payload: { user } }: PayloadAction<TGetUserResponse>) => {
         state.user = user;
       }
     );
@@ -154,7 +156,7 @@ const authSlice = createSlice({
     });
     builder.addCase(
       editUserProfileThunk.fulfilled,
-      (state, { payload }: PayloadAction<EditUserProfileResponse>) => {
+      (state, { payload }: PayloadAction<TEditUserProfileResponse>) => {
         state.user = payload.user;
         state.isEditInProgress = false;
         state.editError = null;

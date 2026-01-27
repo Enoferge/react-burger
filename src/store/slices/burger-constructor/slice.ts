@@ -6,12 +6,12 @@ export type TConstructorIngredient = TIngredient & {
   uniqueId: string;
 };
 
-type State = {
+type TBurgerConstructorState = {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: State = {
+const initialState: TBurgerConstructorState = {
   bun: null,
   ingredients: [],
 };

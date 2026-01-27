@@ -5,17 +5,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { requestWithTokenRefresh } from './request-with-token-refresh';
 
-import type { AppDispatch, RootState } from '@/store';
+import type { TAppDispatch, TRootState } from '@/store';
 import type { AsyncThunk } from '@reduxjs/toolkit';
 
 export function createAuthenticatedThunk<Returned, ThunkArg = void>(
   typePrefix: string,
   apiFn: (arg: ThunkArg) => Promise<Returned>
-): AsyncThunk<Returned, ThunkArg, { state: RootState; dispatch: AppDispatch }> {
+): AsyncThunk<Returned, ThunkArg, { state: TRootState; dispatch: TAppDispatch }> {
   return createAsyncThunk<
     Returned,
     ThunkArg,
-    { state: RootState; dispatch: AppDispatch }
+    { state: TRootState; dispatch: TAppDispatch }
   >(typePrefix, async (arg, { getState, dispatch }) => {
     return await requestWithTokenRefresh<Returned>(
       (accessToken) => {
