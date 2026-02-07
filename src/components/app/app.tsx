@@ -1,5 +1,6 @@
 import { useAppDispatch } from '@/hooks/use-redux-hooks';
 import { ROUTES } from '@/pages/constants';
+import { Feed } from '@/pages/feed/feed';
 import { ForgotPassword } from '@/pages/forgot-password/forgot-password';
 import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
@@ -95,6 +96,14 @@ export const App = (): React.JSX.Element => {
           element={
             <ProtectedRoute access={ACCESS_TYPE.AUTH}>
               <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.FEED}`}
+          element={
+            <ProtectedRoute access={ACCESS_TYPE.ANY}>
+              <Feed />
             </ProtectedRoute>
           }
         />

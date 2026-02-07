@@ -8,7 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
 
-import styles from './home.module.css';
+import sharedStyles from '../shared.module.css';
 
 export const Home = (): React.JSX.Element => {
   const { isLoading } = useAppSelector((state) => state.ingredients);
@@ -20,10 +20,10 @@ export const Home = (): React.JSX.Element => {
 
   return (
     <>
-      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+      <h1 className={`text_type_main-large mt-10 mb-5 pl-5 ${sharedStyles.pageTitle}`}>
         Соберите бургер
       </h1>
-      <main className={`${styles.main} pl-5 pr-5`}>
+      <main className={`${sharedStyles.pageMain} pl-5 pr-5`}>
         {isLoading ? (
           <Loading message="Загрузка ингредиентов..." />
         ) : (
