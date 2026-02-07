@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useAppSelector } from '@/hooks/use-redux-hooks';
+import { useMemo } from 'react';
 
 import styles from './orders-status.module.css';
 
@@ -42,10 +43,21 @@ const StatBlock = ({ title, value }: TStatBlockProps): React.JSX.Element => (
 );
 
 export const OrdersStatus = ({ className }: TOrderStatusProps): React.JSX.Element => {
-  const [ordersReady] = useState(['034533', '034532', '034530']);
-  const [ordersInProgress] = useState(['034538', '034541', '034542']);
-  const [ordersTotalCount] = useState(28752);
-  const [ordersTodayCount] = useState(138);
+  const { total, totalToday, orders } = useAppSelector((state) => state.feed);
+
+  const { ordersReady, ordersInProgress } = useMemo(() => {
+    const ready: string[] = [];
+    const inProgress: string[] = [];
+
+    for (const order of orders) {
+      if (order.status === 'done') {
+        ready.push(order._id);
+      } else if (order.status === 'in_progress') {
+        inProgress.push(order._id);
+      }
+    }
+    return { ordersReady: ready, ordersInProgress: inProgress };
+  }, [orders]);
 
   return (
     <section className={className}>
@@ -54,8 +66,8 @@ export const OrdersStatus = ({ className }: TOrderStatusProps): React.JSX.Elemen
         <OrdersListBlock title="В работе:" numbers={ordersInProgress} />
       </div>
 
-      <StatBlock title="Выполнено за все время:" value={ordersTotalCount} />
-      <StatBlock title="Выполнено за сегодня:" value={ordersTodayCount} />
+      <StatBlock title="Выполнено за все время:" value={total} />
+      <StatBlock title="Выполнено за сегодня:" value={totalToday} />
     </section>
   );
 };
