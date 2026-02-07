@@ -7,6 +7,16 @@ type TOrderStatusProps = {
   className?: string;
 };
 
+const ORDERS_PER_COLUMN = 10;
+
+const chunk = <T,>(arr: T[], size: number): T[][] => {
+  const result: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+};
+
 type TOrdersListBlockProps = {
   title: string;
   numbers: string[];
@@ -22,18 +32,27 @@ const OrdersListBlock = ({
   title,
   numbers,
   isReady = false,
-}: TOrdersListBlockProps): React.JSX.Element => (
-  <div className={styles.currentOrdersBlock}>
-    <h3 className="text text_type_main-medium">{title}</h3>
-    <ul
-      className={`mt-6 text text_type_digits-default ${styles.numbersList} ${isReady ? styles.numbersListReady : ''}`}
-    >
-      {numbers.map((num) => (
-        <li key={num}>{num}</li>
-      ))}
-    </ul>
-  </div>
-);
+}: TOrdersListBlockProps): React.JSX.Element => {
+  const columns = chunk(numbers, ORDERS_PER_COLUMN);
+
+  return (
+    <div className={styles.currentOrdersBlock}>
+      <h3 className="text text_type_main-medium">{title}</h3>
+      <div className={styles.columnsWrapper}>
+        {columns.map((column, columnIndex) => (
+          <ul
+            key={columnIndex}
+            className={`mt-6 text text_type_digits-default ${styles.numbersList} ${isReady ? styles.numbersListReady : ''}`}
+          >
+            {column.map((num) => (
+              <li key={num}>{num}</li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const StatBlock = ({ title, value }: TStatBlockProps): React.JSX.Element => (
   <div className="mt-15">
