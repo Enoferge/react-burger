@@ -9,7 +9,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
 
-type ResetPasswordLocationState = {
+type TResetPasswordLocationState = {
   allowReset?: boolean;
 };
 
@@ -40,7 +40,7 @@ export const ResetPassword = (): React.JSX.Element => {
     }
   };
 
-  const locationState = location.state as ResetPasswordLocationState | null;
+  const locationState = location.state as TResetPasswordLocationState | null;
 
   if (!locationState?.allowReset) {
     return <Navigate to={ROUTES.FORGOT_PASSWORD} replace />;

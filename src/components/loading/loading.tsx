@@ -1,6 +1,6 @@
 import styles from './loading.module.css';
 
-type LoadingProps = {
+type TLoadingProps = {
   message?: string;
   className?: string;
 };
@@ -8,7 +8,7 @@ type LoadingProps = {
 export const Loading = ({
   message = 'Загрузка...',
   className,
-}: LoadingProps): React.JSX.Element => {
+}: TLoadingProps): React.JSX.Element => {
   return (
     <div className={`${styles.wrapper}  p-8 ${className ?? ''}`}>
       <p className="text text_type_main-default text_color_inactive">{message}</p>

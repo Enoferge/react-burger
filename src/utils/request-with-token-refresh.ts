@@ -2,17 +2,17 @@ import { tokenStorage } from '@/utils/token-storage';
 
 import { HttpError } from './http-error';
 
-import type { RefreshTokenResponse } from '@/api/auth';
-import type { AppDispatch, RootState } from '@/store';
+import type { TRefreshTokenResponse } from '@/api/auth';
+import type { TAppDispatch, TRootState } from '@/store';
 import type { AsyncThunk } from '@reduxjs/toolkit';
 
 const ERROR_MSG = 'Session expired. Please login again.';
 
 export async function requestWithTokenRefresh<T>(
   requestFn: (accessToken: string | null) => Promise<T>,
-  getState: () => RootState,
-  dispatch: AppDispatch,
-  refreshTokenThunk: AsyncThunk<RefreshTokenResponse, void, Record<string, never>>,
+  getState: () => TRootState,
+  dispatch: TAppDispatch,
+  refreshTokenThunk: AsyncThunk<TRefreshTokenResponse, void, Record<string, never>>,
   clearAuthAction: () => { type: string }
 ): Promise<T> {
   const state = getState();

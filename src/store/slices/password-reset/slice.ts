@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { requestPasswordResetThunk, confirmPasswordResetThunk } from './actions';
 
-type PasswordResetState = {
+type TPasswordResetState = {
   isLoading: boolean;
   error: string | null;
   resetRequestSuccess: boolean;
@@ -10,7 +10,7 @@ type PasswordResetState = {
   message: string | null;
 };
 
-const initialState: PasswordResetState = {
+const initialState: TPasswordResetState = {
   isLoading: false,
   error: null,
   resetRequestSuccess: false,

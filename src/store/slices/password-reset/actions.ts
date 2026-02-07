@@ -1,25 +1,25 @@
 import { requestPasswordReset, confirmPasswordReset } from '@/api/password-reset';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-type RequestPasswordResetPayload = {
+type TRequestPasswordResetPayload = {
   email: string;
 };
 
-type ConfirmPasswordResetPayload = {
+type TConfirmPasswordResetPayload = {
   password: string;
   token: string;
 };
 
 export const requestPasswordResetThunk = createAsyncThunk(
   'passwordReset/request',
-  async (payload: RequestPasswordResetPayload) => {
+  async (payload: TRequestPasswordResetPayload) => {
     return await requestPasswordReset(payload.email);
   }
 );
 
 export const confirmPasswordResetThunk = createAsyncThunk(
   'passwordReset/confirm',
-  async (payload: ConfirmPasswordResetPayload) => {
+  async (payload: TConfirmPasswordResetPayload) => {
     return await confirmPasswordReset(payload.password, payload.token);
   }
 );
