@@ -10,9 +10,19 @@ import styles from './card-order.module.css';
 
 type TCardOrderProps = {
   order: TEnrichedOrder;
+  isStatusShown?: boolean;
 };
 
-export const CardOrder = ({ order }: TCardOrderProps): React.JSX.Element => {
+const STATUS_NAME: Record<TEnrichedOrder['status'], string> = {
+  created: 'Создан',
+  done: 'Выполнен',
+  pending: 'Готовится',
+};
+
+export const CardOrder = ({
+  order,
+  isStatusShown = false,
+}: TCardOrderProps): React.JSX.Element => {
   return (
     <div className={`p-6 ${styles.card}`}>
       <div className={`text text_type_main-default ${styles.header}`}>
@@ -21,13 +31,19 @@ export const CardOrder = ({ order }: TCardOrderProps): React.JSX.Element => {
       </div>
 
       <p className="text text_type_main-medium mt-6">{order.name}</p>
+      {isStatusShown && order.status ? (
+        <p
+          className={`text text_type_main-default mt-2 ${order.status === 'done' ? styles.statusColorAccent : ''}`}
+        >
+          {STATUS_NAME[order.status]}
+        </p>
+      ) : undefined}
 
       <div className={`mt-6 ${styles.ingredients}`}>
         <IngredientPreviewList
           className={styles.ingredientsList}
           ingredients={order.ingredientsWithDetails}
         />
-        {/* <Price price={order.totalPrice} /> */}
         <Price price={order.totalPrice} />
       </div>
     </div>

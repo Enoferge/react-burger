@@ -2,6 +2,6 @@
   display: flex;
 }
 
-.listItem {
+.listItem:not(:first-of-type) {
   margin-left: -16px;
 }

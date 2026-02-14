@@ -73,7 +73,7 @@ export const OrdersStatus = ({ className }: TOrderStatusProps): React.JSX.Elemen
     for (const order of orders) {
       if (order.status === 'done') {
         ready.push(order._id);
-      } else if (order.status === 'in_progress') {
+      } else if (order.status === 'pending') {
         inProgress.push(order._id);
       }
     }

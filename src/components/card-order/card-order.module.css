@@ -23,3 +23,7 @@
 .ingredientsList {
   flex: 1;
 }
+
+.statusColorAccent {
+  color: var(--colors-interface-success);
+}

@@ -3,7 +3,7 @@ import type { TIngredient } from '@/utils/types';
 export type TFeedOrder = {
   ingredients: TIngredient['_id'][];
   _id: string;
-  status: string;
+  status: 'created' | 'pending' | 'done';
   number: number;
   name: string;
   createdAt: string;
