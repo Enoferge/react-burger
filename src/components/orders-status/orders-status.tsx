@@ -63,7 +63,7 @@ const StatBlock = ({ title, value }: TStatBlockProps): React.JSX.Element => (
 
 export const OrdersStatus = ({ className }: TOrderStatusProps): React.JSX.Element => {
   const {
-    feedData: { total, totalToday, orders = [] },
+    data: { total, totalToday, orders = [] },
   } = useAppSelector((state) => state.feed);
 
   const { ordersReady, ordersInProgress } = useMemo(() => {

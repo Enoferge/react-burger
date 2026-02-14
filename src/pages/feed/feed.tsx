@@ -1,7 +1,7 @@
 import { OrdersList } from '@/components/orders-list/orders-list';
 import { OrdersStatus } from '@/components/orders-status/orders-status';
 import { useAppDispatch } from '@/hooks/use-redux-hooks';
-import { wsConnect, wsDisconnect } from '@/store/slices/feed/actions';
+import { feedWsConnect, feedWsDisconnect } from '@/store/slices/feed/actions';
 import { FEED_SERVER_URL } from '@/store/slices/feed/constants';
 import { useEffect } from 'react';
 
@@ -11,10 +11,10 @@ import styles from './feed.module.css';
 export const Feed = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const connect = (): void => {
-    dispatch(wsConnect(FEED_SERVER_URL));
+    dispatch(feedWsConnect(FEED_SERVER_URL));
   };
   const disconnect = (): void => {
-    dispatch(wsDisconnect());
+    dispatch(feedWsDisconnect());
   };
 
   useEffect((): (() => void) => {
