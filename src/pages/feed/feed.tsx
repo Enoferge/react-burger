@@ -1,4 +1,4 @@
-import { OrdersList } from '@/components/orders-list/orders-list';
+import { CardOrdersList } from '@/components/card-orders-list/card-orders-list';
 import { OrdersStatus } from '@/components/orders-status/orders-status';
 import { useAppDispatch } from '@/hooks/use-redux-hooks';
 import { feedWsConnect, feedWsDisconnect } from '@/store/slices/feed/actions';
@@ -33,7 +33,7 @@ export const Feed = (): React.JSX.Element => {
       <main
         className={`${sharedStyles.pageMain} ${sharedStyles.pageMainWithGap} pl-5 pr-5`}
       >
-        <OrdersList className={styles.section} />
+        <CardOrdersList className={styles.section} />
         <OrdersStatus className={styles.section} />
       </main>
     </>

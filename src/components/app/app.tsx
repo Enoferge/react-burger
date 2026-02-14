@@ -11,6 +11,7 @@ import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
 import { ResetPassword } from '@/pages/reset-password/reset-password';
 import { checkUserAuthThunk } from '@/store/slices/auth/actions';
+import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, type Location } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ export const App = (): React.JSX.Element => {
 
   useEffect(() => {
     void dispatch(checkUserAuthThunk());
+    void dispatch(fetchIngredientsThunk());
   }, [dispatch]);
 
   return (

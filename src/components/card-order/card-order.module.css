@@ -1,0 +1,25 @@
+.card {
+  background-color: var(--background);
+  border-radius: calc(var(--offset-base-size) * 10);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.orderId {
+  margin: 0;
+}
+
+.time {
+  color: var(--text-inactive-color);
+}
+
+.ingredients {
+  display: flex;
+}
+
+.ingredientsList {
+  flex: 1;
+}

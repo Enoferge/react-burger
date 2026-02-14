@@ -1,7 +1,5 @@
 import { Loading } from '@/components/loading/loading';
-import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
-import { fetchIngredientsThunk } from '@/store/slices/ingredients/actions';
-import { useEffect } from 'react';
+import { useAppSelector } from '@/hooks/use-redux-hooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -12,11 +10,11 @@ import sharedStyles from '../shared.module.css';
 
 export const Home = (): React.JSX.Element => {
   const { isLoading } = useAppSelector((state) => state.ingredients);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    void dispatch(fetchIngredientsThunk());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   void dispatch(fetchIngredientsThunk());
+  // }, [dispatch]);
 
   return (
     <>
