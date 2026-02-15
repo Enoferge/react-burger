@@ -1,6 +1,7 @@
 import { FormattedDate } from '@krgaa/react-developer-burger-ui-components';
 
 import { IngredientPreviewList } from '../ingredient-preview-list/ingredient-preview-list';
+import { OrderStatus } from '../order-status/order-status';
 import { Price } from '../price/price';
 
 import type { TEnrichedOrder } from '@/store/selectors/orders';
@@ -12,12 +13,6 @@ export type TCardOrderProps = {
   order: TEnrichedOrder;
   isStatusShown?: boolean;
   onClick?: (order: TEnrichedOrder) => void;
-};
-
-const STATUS_NAME: Record<TEnrichedOrder['status'], string> = {
-  created: 'Создан',
-  done: 'Выполнен',
-  pending: 'Готовится',
 };
 
 export const CardOrder = ({
@@ -36,13 +31,7 @@ export const CardOrder = ({
       </div>
 
       <p className="text text_type_main-medium mt-6">{order.name}</p>
-      {isStatusShown && order.status ? (
-        <p
-          className={`text text_type_main-default mt-2 ${order.status === 'done' ? styles.statusColorAccent : ''}`}
-        >
-          {STATUS_NAME[order.status]}
-        </p>
-      ) : undefined}
+      {isStatusShown && order.status ? <OrderStatus status={order.status} /> : undefined}
 
       <div className={`mt-6 ${styles.ingredients}`}>
         <IngredientPreviewList

@@ -1,6 +1,7 @@
 import { FormattedDate } from '@krgaa/react-developer-burger-ui-components';
 
 import { IngredientPreview } from '../ingredient-preview/ingredient-preview';
+import { OrderStatus } from '../order-status/order-status';
 import { Price } from '../price/price';
 
 import type { TEnrichedOrder } from '@/store/selectors/orders';
@@ -12,12 +13,6 @@ type TOrderDetailsProps = {
   order?: TEnrichedOrder;
 };
 
-const STATUS_NAME: Record<TEnrichedOrder['status'], string> = {
-  created: 'Создан',
-  done: 'Выполнен',
-  pending: 'Готовится',
-};
-
 export const OrderDetails = ({ order }: TOrderDetailsProps): React.JSX.Element => {
   if (!order) {
     return <p className="text text_type_main-medium mt-15">Нет информации о заказе</p>;
@@ -26,11 +21,7 @@ export const OrderDetails = ({ order }: TOrderDetailsProps): React.JSX.Element =
   return (
     <div className={`${styles.wrapper}`}>
       <p className="text text_type_main-medium">{order.name}</p>
-      <p
-        className={`text text_type_main-default mt-2 ${order.status === 'done' ? styles.statusColorAccent : ''} ${styles.status}`}
-      >
-        {STATUS_NAME[order.status]}
-      </p>
+      <OrderStatus status={order.status} className={styles.status} />
       <p className="text text_type_main-medium mt-15">Состав:</p>
 
       <ul className={`pr-6 ${styles.ingredientsList} mt-6`}>
