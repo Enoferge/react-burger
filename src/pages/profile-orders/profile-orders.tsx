@@ -12,20 +12,13 @@ import styles from './profile-orders.module.css';
 export const ProfileOrders = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const connect = (): void => {
-    dispatch(profileWsConnect(PROFILE_HISTORY_SERVER_URL));
-  };
-  const disconnect = (): void => {
-    dispatch(profileWsDisconnect());
-  };
-
   useEffect((): (() => void) => {
-    void connect();
+    dispatch(profileWsConnect(PROFILE_HISTORY_SERVER_URL));
 
     return (): void => {
-      disconnect();
+      dispatch(profileWsDisconnect());
     };
-  }, [connect, disconnect]);
+  }, [dispatch]);
 
   return (
     <PageLayout className={styles.wrapper}>

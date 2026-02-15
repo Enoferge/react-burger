@@ -6,6 +6,8 @@ import { Home } from '@/pages/home/home';
 import { IngredientModal } from '@/pages/ingredient-modal/ingredient-modal';
 import { Ingredient } from '@/pages/ingredient/ingredient';
 import { Login } from '@/pages/login/login';
+import { OrderDetailsModal } from '@/pages/order-details-modal/order-details-modal';
+import { OrderInformation } from '@/pages/order-information/order-information';
 import { ProfileOrders } from '@/pages/profile-orders/profile-orders';
 import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
@@ -102,6 +104,14 @@ export const App = (): React.JSX.Element => {
           }
         />
         <Route
+          path={`${ROUTES.FEED}/:number`}
+          element={
+            <ProtectedRoute>
+              <OrderInformation />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path={`${ROUTES.FEED}`}
           element={
             <ProtectedRoute access={ACCESS_TYPE.ANY}>
@@ -114,6 +124,7 @@ export const App = (): React.JSX.Element => {
       {backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+          <Route path={`${ROUTES.FEED}/:number`} element={<OrderDetailsModal />} />
         </Routes>
       )}
     </div>

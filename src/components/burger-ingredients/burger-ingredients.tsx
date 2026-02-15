@@ -40,7 +40,13 @@ export const BurgerIngredients = (): React.JSX.Element => {
 
   const handleIngredientClick = (ingredient: TIngredient): void => {
     void navigate(`/ingredients/${ingredient._id}`, {
-      state: { background: location },
+      state: {
+        background: {
+          pathname: location.pathname,
+          search: location.search,
+          hash: location.hash,
+        },
+      },
     });
   };
 

@@ -3,6 +3,10 @@
   border-radius: calc(var(--offset-base-size) * 10);
 }
 
+.cardClickable {
+  cursor: pointer;
+}
+
 .header {
   display: flex;
   justify-content: space-between;

@@ -147,7 +147,6 @@ export const Profile = (): React.JSX.Element => {
             extraClass="mt-6"
             icon="EditIcon"
             onInvalid={() => {
-              console.log('error');
               setIsSubmitDisabled(true);
             }}
           />

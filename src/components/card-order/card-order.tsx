@@ -8,9 +8,10 @@ import type React from 'react';
 
 import styles from './card-order.module.css';
 
-type TCardOrderProps = {
+export type TCardOrderProps = {
   order: TEnrichedOrder;
   isStatusShown?: boolean;
+  onClick?: (order: TEnrichedOrder) => void;
 };
 
 const STATUS_NAME: Record<TEnrichedOrder['status'], string> = {
@@ -21,10 +22,14 @@ const STATUS_NAME: Record<TEnrichedOrder['status'], string> = {
 
 export const CardOrder = ({
   order,
+  onClick,
   isStatusShown = false,
 }: TCardOrderProps): React.JSX.Element => {
   return (
-    <div className={`p-6 ${styles.card}`}>
+    <div
+      className={`p-6 ${styles.card} ${onClick ? styles.cardClickable : ''}`}
+      onClick={() => onClick?.(order)}
+    >
       <div className={`text text_type_main-default ${styles.header}`}>
         <p className={`${styles.orderId}`}>#{order.number}</p>
         <FormattedDate date={new Date(order.createdAt)} className={styles.time} />

@@ -19,7 +19,7 @@ const chunk = <T,>(arr: T[], size: number): T[][] => {
 
 type TOrdersListBlockProps = {
   title: string;
-  numbers: string[];
+  numbers: number[];
   isReady?: boolean;
 };
 
@@ -67,14 +67,14 @@ export const OrdersStatus = ({ className }: TOrderStatusProps): React.JSX.Elemen
   } = useAppSelector((state) => state.feed);
 
   const { ordersReady, ordersInProgress } = useMemo(() => {
-    const ready: string[] = [];
-    const inProgress: string[] = [];
+    const ready: number[] = [];
+    const inProgress: number[] = [];
 
     for (const order of orders) {
       if (order.status === 'done') {
-        ready.push(order._id);
+        ready.push(order.number);
       } else if (order.status === 'pending') {
-        inProgress.push(order._id);
+        inProgress.push(order.number);
       }
     }
     return { ordersReady: ready, ordersInProgress: inProgress };

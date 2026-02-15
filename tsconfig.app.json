@@ -40,5 +40,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"],
-  "exclude": ["cypress"],
+  "exclude": ["cypress"]
 }

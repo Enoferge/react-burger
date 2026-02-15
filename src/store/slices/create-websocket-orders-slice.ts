@@ -45,11 +45,6 @@ export const createWebSocketOrdersSlice = (
       },
       onMessage: (state, action: PayloadAction<TOrdersData>) => {
         state.success = false;
-        const data = { ...action.payload };
-        data.orders.map((order) => {
-          // const totalPrices = order.
-          return { ...order };
-        });
         state.data = action.payload;
       },
     },

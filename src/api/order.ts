@@ -1,5 +1,6 @@
 import fetchApi from './client';
 
+import type { TOrderInformation } from '@/store/slices/order/slice';
 import type { TIngredient } from '@/utils/types';
 
 export type TCreateOrderResponse = {
@@ -7,6 +8,14 @@ export type TCreateOrderResponse = {
   order: {
     number: number;
   };
+};
+
+export type TGetOrderRequest = {
+  number: string;
+};
+
+export type TGetOrderResponse = {
+  orders: TOrderInformation[];
 };
 
 export async function createOrder(
@@ -21,4 +30,15 @@ export async function createOrder(
   });
 
   return response;
+}
+
+export async function getOrderByNumber(
+  number: TGetOrderRequest['number']
+): Promise<TGetOrderResponse> {
+  return await fetchApi<TGetOrderResponse>(`/orders/${number}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }

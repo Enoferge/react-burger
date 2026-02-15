@@ -4,26 +4,40 @@ import { useAppDispatch } from '@/hooks/use-redux-hooks';
 import { feedWsConnect, feedWsDisconnect } from '@/store/slices/feed/actions';
 import { FEED_SERVER_URL } from '@/store/slices/feed/constants';
 import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { ROUTES } from '../constants';
+
+import type { TEnrichedOrder } from '@/store/selectors/orders';
 
 import sharedStyles from '../shared.module.css';
 import styles from './feed.module.css';
 
 export const Feed = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
-  const connect = (): void => {
-    dispatch(feedWsConnect(FEED_SERVER_URL));
-  };
-  const disconnect = (): void => {
-    dispatch(feedWsDisconnect());
-  };
 
   useEffect((): (() => void) => {
-    void connect();
+    dispatch(feedWsConnect(FEED_SERVER_URL));
 
     return (): void => {
-      disconnect();
+      dispatch(feedWsDisconnect());
     };
-  }, [connect, disconnect]);
+  }, [dispatch]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleCardOrderClick = (order: TEnrichedOrder): void => {
+    void navigate(`${ROUTES.FEED}/${order.number}`, {
+      state: {
+        background: {
+          pathname: location.pathname,
+          search: location.search,
+          hash: location.hash,
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -33,7 +47,10 @@ export const Feed = (): React.JSX.Element => {
       <main
         className={`${sharedStyles.pageMain} ${sharedStyles.pageMainWithGap} pl-5 pr-5`}
       >
-        <CardOrdersList className={styles.section} />
+        <CardOrdersList
+          className={styles.section}
+          onCardOrderClick={handleCardOrderClick}
+        />
         <OrdersStatus className={styles.section} />
       </main>
     </>
