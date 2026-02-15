@@ -4,6 +4,7 @@
   align-items: center;
   width: 480px;
   margin: 0 auto;
+  padding-top: calc(var(--offset-base-size) * 45);
   overflow: hidden;
 }
 

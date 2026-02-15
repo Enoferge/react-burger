@@ -1,0 +1,33 @@
+.currentOrdersWrapper {
+  display: flex;
+  gap: calc(var(--offset-base-size) * 9);
+  max-height: 25vh;
+  overflow-y: auto;
+}
+
+.currentOrdersBlock {
+  flex: 1;
+}
+
+.columnsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--offset-base-size) * 4);
+}
+
+.numbersList {
+  display: inline-flex;
+  flex-direction: column;
+  gap: calc(var(--offset-base-size) * 2);
+}
+
+.numbersListReady {
+  color: var(--colors-interface-success);
+}
+
+.numberGlow {
+  text-shadow:
+    0 0 8px rgb(51 51 255 / 80%),
+    0 0 16px rgb(51 51 255 / 50%),
+    0 0 24px rgb(51 51 255 / 30%);
+}

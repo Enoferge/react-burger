@@ -1,0 +1,38 @@
+.wrapper {
+  position: relative;
+  box-sizing: border-box;
+  width: 64px;
+  height: 64px;
+  padding: 2px;
+  background: linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%);
+  border-radius: 50%;
+}
+
+.inner {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  border-radius: 50%;
+}
+
+.image {
+  position: absolute;
+  top: 4px;
+  left: calc(50% - 56px);
+  height: 56px;
+}
+
+.moreCountBg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.moreCount {
+  position: absolute;
+  top: calc(50% - 12px);
+  left: calc(50% - 10px);
+}

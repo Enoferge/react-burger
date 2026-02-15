@@ -1,7 +1,45 @@
-.root {
+.wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  width: 640px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.time {
+  color: var(--text-inactive-color);
+}
+
+.ingredients {
+  display: flex;
+}
+
+.ingredientsList {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--offset-base-size) * 6);
+  width: 100%;
+  max-height: 366px;
+  overflow-y: auto;
+}
+
+.ingredientRow {
+  display: flex;
   align-items: center;
-  text-align: center;
+}
+
+.ingredientPrice {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.status {
+  line-height: 34px;
 }
