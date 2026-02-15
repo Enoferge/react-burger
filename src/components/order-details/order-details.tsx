@@ -40,7 +40,7 @@ export const OrderDetails = ({ order }: TOrderDetailsProps): React.JSX.Element =
               <IngredientPreview ingredient={ing} />
               <p className="ml-4 text text_type_main-default">{ing.name}</p>
               <div className={`${styles.ingredientPrice}`}>
-                <Price price={ing.price} count={1} />
+                <Price price={ing.price} count={ing.count} />
               </div>
             </div>
           </li>

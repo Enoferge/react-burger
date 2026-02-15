@@ -45,7 +45,20 @@ export const createWebSocketOrdersSlice = (
       },
       onMessage: (state, action: PayloadAction<TOrdersData>) => {
         state.success = false;
-        state.data = action.payload;
+
+        const { orders = [], total, totalToday } = action.payload || {};
+
+        const sortedOrders = [...orders].sort((a, b) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return timeB - timeA;
+        });
+
+        state.data = {
+          orders: sortedOrders,
+          total,
+          totalToday,
+        };
       },
     },
   });

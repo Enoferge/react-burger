@@ -5,20 +5,39 @@ import type { TOrderInformation } from '../slices/order/slice';
 import type { TFeedOrder, TOrdersData } from '../types';
 import type { TIngredient } from '@/utils/types';
 
+export type TEnrichedIngredient = TIngredient & {
+  count: number;
+};
+
 export type TEnrichedOrder = TFeedOrder & {
-  ingredientsWithDetails: TIngredient[];
+  ingredientsWithDetails: TEnrichedIngredient[];
   totalPrice: number;
 };
+
+const countByIngredientId = (ids: string[]): Map<string, number> =>
+  ids.reduce((acc, id) => {
+    acc.set(id, (acc.get(id) ?? 0) + 1);
+    return acc;
+  }, new Map<string, number>());
 
 const enrichOrder = (
   order: TFeedOrder | TOrderInformation,
   ingredients: TIngredient[]
 ): TEnrichedOrder => {
   const itemsMap = new Map(ingredients.map((i) => [i._id, i]));
-  const ingredientsWithDetails = order.ingredients
-    .map((id) => itemsMap.get(id))
-    .filter((ing): ing is TIngredient => ing != null);
-  const totalPrice = ingredientsWithDetails.reduce((sum, i) => sum + i.price, 0);
+  const countById = countByIngredientId(order.ingredients);
+
+  const ingredientsWithDetails: TEnrichedIngredient[] = Array.from(countById.entries())
+    .map(([id, count]) => {
+      const ingredient = itemsMap.get(id);
+      return ingredient ? { ...ingredient, count } : null;
+    })
+    .filter((ing): ing is TEnrichedIngredient => ing != null);
+
+  const totalPrice = ingredientsWithDetails.reduce(
+    (sum, i) => sum + i.price * i.count,
+    0
+  );
 
   return {
     ...order,
