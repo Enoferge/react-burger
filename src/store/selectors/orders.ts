@@ -41,14 +41,35 @@ export const selectFeedOrdersWithDetails = createSelector(
   }
 );
 
+export const selectProfileOrdersWithDetails = createSelector(
+  [
+    (state: TRootState): TOrdersData => state.profileHistory.data,
+    (state: TRootState): TIngredient[] => state.ingredients.ingredients,
+  ],
+  (profileData, ingredients): TEnrichedOrder[] => {
+    if (!profileData?.orders) {
+      return [];
+    }
+
+    return profileData.orders.map((order) => enrichOrder(order, ingredients));
+  }
+);
+
 export const selectOrderWithDetails = createSelector(
   [
     (state: TRootState): TEnrichedOrder[] => selectFeedOrdersWithDetails(state),
+    (state: TRootState): TEnrichedOrder[] => selectProfileOrdersWithDetails(state),
     (state: TRootState): TOrderInformation | null => state.order.orderDetails,
     (state: TRootState): TIngredient[] => state.ingredients.ingredients,
     (_state: TRootState, number?: string): string | undefined => number,
   ],
-  (feedOrders, orderDetails, ingredients, number): TEnrichedOrder | null => {
+  (
+    feedOrders,
+    profileOrders,
+    orderDetails,
+    ingredients,
+    number
+  ): TEnrichedOrder | null => {
     if (!number) {
       return null;
     }
@@ -57,6 +78,12 @@ export const selectOrderWithDetails = createSelector(
 
     if (fromFeed) {
       return fromFeed;
+    }
+
+    const fromProfile = profileOrders.find((o) => String(o.number) === number);
+
+    if (fromProfile) {
+      return fromProfile;
     }
 
     if (orderDetails && String(orderDetails.number) === number) {

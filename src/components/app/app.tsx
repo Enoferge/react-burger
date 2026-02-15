@@ -8,6 +8,7 @@ import { Ingredient } from '@/pages/ingredient/ingredient';
 import { Login } from '@/pages/login/login';
 import { OrderDetailsModal } from '@/pages/order-details-modal/order-details-modal';
 import { OrderInformation } from '@/pages/order-information/order-information';
+import { ProfileLayout } from '@/pages/profile-layout/profile-layout';
 import { ProfileOrders } from '@/pages/profile-orders/profile-orders';
 import { Profile } from '@/pages/profile/profile';
 import { Register } from '@/pages/register/register';
@@ -91,20 +92,23 @@ export const App = (): React.JSX.Element => {
           path={ROUTES.PROFILE}
           element={
             <ProtectedRoute access={ACCESS_TYPE.AUTH}>
-              <Profile />
+              <ProfileLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<Profile />} />
+          <Route path="orders" element={<ProfileOrders />} />
+        </Route>
         <Route
-          path={`${ROUTES.PROFILE}/orders`}
+          path={`${ROUTES.PROFILE}/orders/:id`}
           element={
             <ProtectedRoute access={ACCESS_TYPE.AUTH}>
-              <ProfileOrders />
+              <OrderInformation />
             </ProtectedRoute>
           }
         />
         <Route
-          path={`${ROUTES.FEED}/:number`}
+          path={`${ROUTES.FEED}/:id`}
           element={
             <ProtectedRoute>
               <OrderInformation />
@@ -124,7 +128,8 @@ export const App = (): React.JSX.Element => {
       {backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
-          <Route path={`${ROUTES.FEED}/:number`} element={<OrderDetailsModal />} />
+          <Route path={`${ROUTES.FEED}/:id`} element={<OrderDetailsModal />} />
+          <Route path={`${ROUTES.PROFILE}/orders/:id`} element={<OrderDetailsModal />} />
         </Routes>
       )}
     </div>

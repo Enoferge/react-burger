@@ -1,6 +1,7 @@
 import { CardOrdersList } from '@/components/card-orders-list/card-orders-list';
 import { OrdersStatus } from '@/components/orders-status/orders-status';
-import { useAppDispatch } from '@/hooks/use-redux-hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/use-redux-hooks';
+import { selectFeedOrdersWithDetails } from '@/store/selectors/orders';
 import { feedWsConnect, feedWsDisconnect } from '@/store/slices/feed/actions';
 import { FEED_SERVER_URL } from '@/store/slices/feed/constants';
 import { useEffect } from 'react';
@@ -15,6 +16,7 @@ import styles from './feed.module.css';
 
 export const Feed = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
+  const orders = useAppSelector(selectFeedOrdersWithDetails);
 
   useEffect((): (() => void) => {
     dispatch(feedWsConnect(FEED_SERVER_URL));
@@ -49,6 +51,7 @@ export const Feed = (): React.JSX.Element => {
       >
         <CardOrdersList
           className={styles.section}
+          orders={orders}
           onCardOrderClick={handleCardOrderClick}
         />
         <OrdersStatus className={styles.section} />

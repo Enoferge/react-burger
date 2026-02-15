@@ -7,17 +7,17 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const OrderDetailsModal = (): React.JSX.Element => {
-  const { number } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const order = useAppSelector((state) => selectOrderWithDetails(state, number));
+  const order = useAppSelector((state) => selectOrderWithDetails(state, id));
 
   useEffect(() => {
-    if (!order && number) {
-      void dispatch(getOrderByNumberThunk(number));
+    if (!order && id) {
+      void dispatch(getOrderByNumberThunk(id));
     }
-  }, [number, order, dispatch]);
+  }, [id, order, dispatch]);
 
   const onClose = (): void => {
     void navigate(-1);

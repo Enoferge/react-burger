@@ -1,3 +1,7 @@
+.pageWithTopPadding {
+  padding-top: calc(var(--offset-base-size) * 30);
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
