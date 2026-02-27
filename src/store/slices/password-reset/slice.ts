@@ -10,7 +10,7 @@ type TPasswordResetState = {
   message: string | null;
 };
 
-const initialState: TPasswordResetState = {
+export const initialState: TPasswordResetState = {
   isLoading: false,
   error: null,
   resetRequestSuccess: false,

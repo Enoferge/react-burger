@@ -79,6 +79,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
             size="medium"
             disabled={isCreating}
             onClick={handleCreateOrder}
+            data-cy="order-submit-button"
           >
             Оформить заказ
           </Button>

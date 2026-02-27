@@ -10,7 +10,7 @@ export const ModalOverlay = ({
   onClose,
 }: TModalOverlayProps): React.JSX.Element | null => {
   return (
-    <div className={styles.root} onClick={onClose}>
+    <div className={styles.root} onClick={onClose} data-cy="modal-overlay">
       {children}
     </div>
   );

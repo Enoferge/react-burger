@@ -21,7 +21,7 @@ export type TOrderSliceState = {
   orderDetails: TOrderInformation | null;
 };
 
-const initialState: TOrderSliceState = {
+export const initialState: TOrderSliceState = {
   name: null,
   order: null,
   isCreating: false,
