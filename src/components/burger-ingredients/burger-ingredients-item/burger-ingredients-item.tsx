@@ -31,6 +31,9 @@ export const BurgerIngredientsItem = ({
       ref={dragSource as unknown as Ref<HTMLDivElement>}
       className={styles.wrapper}
       onClick={onItemClick}
+      data-cy="ingredient-item"
+      data-cy-ingredient-id={ingredient._id}
+      data-cy-ingredient-name={ingredient.name}
     >
       <img
         className={`${styles.image} ml-4 mr-4`}

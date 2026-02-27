@@ -40,6 +40,7 @@ export const BurgerConstructorIngredientsDropZone = ({
     <div
       ref={dropIngredientsTarget as unknown as Ref<HTMLDivElement>}
       className={styles.ingredients_drop_zone}
+      data-cy="constructor-drop-zone"
     >
       {ingredients.length ? (
         <ul className={`${styles.scrollable_area}`}>

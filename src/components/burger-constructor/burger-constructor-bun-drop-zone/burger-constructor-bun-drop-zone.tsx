@@ -30,7 +30,10 @@ export const BurgerConstructorBunDropZone = ({
   });
 
   return (
-    <div ref={dropBunTarget as unknown as Ref<HTMLDivElement>}>
+    <div
+      ref={dropBunTarget as unknown as Ref<HTMLDivElement>}
+      data-cy={`constructor-bun-drop-zone-${type}`}
+    >
       {bun ? (
         <BurgerConstructorItem
           ingredient={bun}
