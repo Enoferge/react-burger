@@ -1,25 +1,32 @@
-import { BASE_API_URL } from '../../src/api/client';
-
 const mockEmail = 'enofergetest@yandex.ru';
 const mockRefreshToken = 'test-refresh';
 const mockAccessToken = 'Bearer test-access';
 const mockOrderNumber = 12345;
 
+const selector = {
+  ingredientItem: '[data-cy="ingredient-item"]',
+  constructorDropZone: '[data-cy="constructor-drop-zone"]',
+  constructorBunDropZoneTop: '[data-cy="constructor-bun-drop-zone-top"]',
+  modal: '[data-cy="modal"]',
+  modalClose: '[data-cy="modal-close"]',
+  orderSubmitButton: '[data-cy="order-submit-button"]',
+};
+
 describe('Constructor page', () => {
   beforeEach(() => {
-    cy.intercept('GET', `${BASE_API_URL}/ingredients`, {
+    cy.intercept('GET', '/api/ingredients', {
       fixture: 'ingredients.json',
     }).as('getIngredients');
-    cy.intercept('POST', `${BASE_API_URL}/auth/token`, {
+    cy.intercept('POST', '/api/auth/token', {
       success: true,
       accessToken: mockAccessToken,
       refreshToken: mockRefreshToken,
     }).as('refreshToken');
-    cy.intercept('GET', `${BASE_API_URL}/auth/user`, {
+    cy.intercept('GET', '/api/auth/user', {
       success: true,
       user: { email: mockEmail, name: 'Test User' },
     }).as('getUser');
-    cy.intercept('POST', `${BASE_API_URL}/orders`, {
+    cy.intercept('POST', '/api/orders', {
       success: true,
       name: 'Флюоресцентный бургер',
       order: { number: mockOrderNumber },
@@ -30,23 +37,23 @@ describe('Constructor page', () => {
     });
   });
 
+  afterEach(() => {
+    cy.clearLocalStorage();
+  });
+
   it('drags ingredient into constructor', () => {
     cy.visit('/');
     cy.wait('@getIngredients');
 
-    cy.get('[data-cy="ingredient-item"]').should('have.length.at.least', 1);
-    cy.get('[data-cy="constructor-drop-zone"]').should('be.visible');
+    cy.get(selector.ingredientItem).should('have.length.at.least', 1);
+    cy.get(selector.constructorDropZone).should('be.visible');
 
-    cy.get('[data-cy="ingredient-item"]')
-      .eq(0)
-      .drag('[data-cy="constructor-bun-drop-zone-top"]');
+    cy.get(selector.ingredientItem).eq(0).drag(selector.constructorBunDropZoneTop);
 
-    cy.get('[data-cy="ingredient-item"]')
-      .eq(1)
-      .drag('[data-cy="constructor-drop-zone"]');
+    cy.get(selector.ingredientItem).eq(1).drag(selector.constructorDropZone);
 
     cy.fixture('ingredients.json').then(({ data }) => {
-      cy.get('[data-cy="constructor-drop-zone"]').within(() => {
+      cy.get(selector.constructorDropZone).within(() => {
         cy.contains(data[1].name).should('exist');
       });
     });
@@ -56,9 +63,9 @@ describe('Constructor page', () => {
     cy.visit('/');
     cy.wait('@getIngredients');
 
-    cy.get('[data-cy="ingredient-item"]').eq(2).click();
+    cy.get(selector.ingredientItem).eq(2).click();
 
-    cy.get('[data-cy="modal"]').within(() => {
+    cy.get(selector.modal).within(() => {
       cy.contains('Детали ингредиента').should('be.visible');
     });
   });
@@ -67,11 +74,11 @@ describe('Constructor page', () => {
     cy.visit('/');
     cy.wait('@getIngredients');
 
-    cy.get('[data-cy="ingredient-item"]').eq(2).click();
+    cy.get(selector.ingredientItem).eq(2).click();
 
     cy.fixture('ingredients.json').then(({ data }) => {
       const sauce = data[2];
-      cy.get('[data-cy="modal"]').within(() => {
+      cy.get(selector.modal).within(() => {
         cy.contains(sauce.name).should('be.visible');
         cy.contains('Калории').should('be.visible');
         cy.contains(String(sauce.calories)).should('be.visible');
@@ -88,18 +95,14 @@ describe('Constructor page', () => {
     cy.wait('@refreshToken');
     cy.wait('@getUser');
 
-    cy.get('[data-cy="ingredient-item"]')
-      .eq(0)
-      .drag('[data-cy="constructor-bun-drop-zone-top"]');
-    cy.get('[data-cy="ingredient-item"]')
-      .eq(1)
-      .drag('[data-cy="constructor-drop-zone"]');
+    cy.get(selector.ingredientItem).eq(0).drag(selector.constructorBunDropZoneTop);
+    cy.get(selector.ingredientItem).eq(1).drag(selector.constructorDropZone);
 
-    cy.get('[data-cy="order-submit-button"]').click();
+    cy.get(selector.orderSubmitButton).click();
     cy.wait('@createOrder');
 
-    cy.get('[data-cy="modal"]').should('be.visible');
-    cy.get('[data-cy="modal"]').within(() => {
+    cy.get(selector.modal).should('be.visible');
+    cy.get(selector.modal).within(() => {
       cy.contains(String(mockOrderNumber)).should('be.visible');
       cy.contains('идентификатор заказа').should('be.visible');
       cy.contains('Ваш заказ начали готовить').should('be.visible');
@@ -110,14 +113,14 @@ describe('Constructor page', () => {
     cy.visit('/');
     cy.wait('@getIngredients');
 
-    cy.get('[data-cy="ingredient-item"]').eq(0).click();
-    cy.get('[data-cy="modal"]').should('be.visible');
-    cy.get('[data-cy="modal-close"]').click();
-    cy.get('[data-cy="modal"]').should('not.exist');
+    cy.get(selector.ingredientItem).eq(0).click();
+    cy.get(selector.modal).should('be.visible');
+    cy.get(selector.modalClose).click();
+    cy.get(selector.modal).should('not.exist');
 
-    cy.get('[data-cy="ingredient-item"]').eq(1).click();
-    cy.get('[data-cy="modal"]').should('be.visible');
-    cy.get('[data-cy="modal-close"]').click();
-    cy.get('[data-cy="modal"]').should('not.exist');
+    cy.get(selector.ingredientItem).eq(1).click();
+    cy.get(selector.modal).should('be.visible');
+    cy.get(selector.modalClose).click();
+    cy.get(selector.modal).should('not.exist');
   });
 });
