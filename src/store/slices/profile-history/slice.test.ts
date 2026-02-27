@@ -1,4 +1,5 @@
 import { WebsocketStatus } from '@/store/middleware/types';
+import { webSocketOrdersInitialState } from '@/store/slices/create-websocket-orders-slice';
 import { describe, it, expect } from 'vitest';
 
 import profileHistoryReducer, {
@@ -9,15 +10,11 @@ import profileHistoryReducer, {
   onMessage,
 } from './slice';
 
-const emptyData = { orders: [], total: 0, totalToday: 0 };
-
 describe('profileHistory slice', () => {
   it('should return the initial state', () => {
-    expect(profileHistoryReducer(undefined, { type: '' })).toEqual({
-      status: WebsocketStatus.OFFLINE,
-      success: true,
-      data: emptyData,
-    });
+    expect(profileHistoryReducer(undefined, { type: '' })).toEqual(
+      webSocketOrdersInitialState
+    );
   });
 
   it('should handle onConnecting', () => {
@@ -40,7 +37,7 @@ describe('profileHistory slice', () => {
     const next = profileHistoryReducer(undefined, onError('ws error'));
     expect(next.success).toBe(false);
     expect(next.error).toBe('ws error');
-    expect(next.data).toEqual(emptyData);
+    expect(next.data).toEqual(webSocketOrdersInitialState.data);
   });
 
   it('should handle onMessage', () => {

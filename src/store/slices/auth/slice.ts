@@ -34,7 +34,7 @@ type TAuthState = {
 
 const savedRefreshToken = tokenStorage.getRefreshToken();
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
   user: null,
   accessToken: null,
   refreshToken: savedRefreshToken,

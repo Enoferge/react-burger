@@ -9,25 +9,25 @@ const emptyOrdersData: TOrdersData = {
   totalToday: 0,
 };
 
-type TWebSocketOrdersState = {
+export type TWebSocketOrdersState = {
   status: TWebsocketStatus;
   success: boolean;
   error?: string;
   data: TOrdersData;
 };
 
+export const webSocketOrdersInitialState: TWebSocketOrdersState = {
+  status: WebsocketStatus.OFFLINE,
+  success: true,
+  data: emptyOrdersData,
+};
+
 export const createWebSocketOrdersSlice = (
   name: string
 ): Slice<TWebSocketOrdersState> => {
-  const initialState: TWebSocketOrdersState = {
-    status: WebsocketStatus.OFFLINE,
-    success: true,
-    data: emptyOrdersData,
-  } as TWebSocketOrdersState;
-
   return createSlice({
     name,
-    initialState,
+    initialState: webSocketOrdersInitialState,
     reducers: {
       onConnecting: (state) => {
         state.status = WebsocketStatus.CONNECTING;

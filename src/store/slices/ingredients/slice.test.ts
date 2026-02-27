@@ -1,15 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
 import { fetchIngredientsThunk } from './actions';
-import ingredientsReducer from './slice';
+import ingredientsReducer, { initialState } from './slice';
 
 import type { TIngredient } from '@/utils/types';
-
-const initialState = {
-  ingredients: [],
-  isLoading: false,
-  error: null,
-};
 
 const mockIngredients: TIngredient[] = [
   {

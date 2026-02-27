@@ -70,15 +70,12 @@ vi.mock('./actions', () => {
 });
 
 import { createOrderThunk, getOrderByNumberThunk } from './actions';
-import orderReducer, { setOrder, setIsCreating, clearOrder } from './slice';
-
-const initialState = {
-  name: null,
-  order: null,
-  isCreating: false,
-  isOrderDetailsLoading: false,
-  orderDetails: null,
-};
+import orderReducer, {
+  initialState,
+  setOrder,
+  setIsCreating,
+  clearOrder,
+} from './slice';
 
 describe('order slice', () => {
   it('should return the initial state', () => {

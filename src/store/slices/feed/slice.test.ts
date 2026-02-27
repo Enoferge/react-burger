@@ -1,17 +1,12 @@
 import { WebsocketStatus } from '@/store/middleware/types';
+import { webSocketOrdersInitialState } from '@/store/slices/create-websocket-orders-slice';
 import { describe, it, expect } from 'vitest';
 
 import feedReducer, { onConnecting, onOpen, onClose, onError, onMessage } from './slice';
 
-const emptyData = { orders: [], total: 0, totalToday: 0 };
-
 describe('feed slice', () => {
   it('should return the initial state', () => {
-    expect(feedReducer(undefined, { type: '' })).toEqual({
-      status: WebsocketStatus.OFFLINE,
-      success: true,
-      data: emptyData,
-    });
+    expect(feedReducer(undefined, { type: '' })).toEqual(webSocketOrdersInitialState);
   });
 
   it('should handle onConnecting', () => {
@@ -34,7 +29,7 @@ describe('feed slice', () => {
     const next = feedReducer(undefined, onError('error'));
     expect(next.success).toBe(false);
     expect(next.error).toBe('error');
-    expect(next.data).toEqual(emptyData);
+    expect(next.data).toEqual(webSocketOrdersInitialState.data);
   });
 
   it('should handle onMessage', () => {

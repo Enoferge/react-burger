@@ -1,15 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { requestPasswordResetThunk, confirmPasswordResetThunk } from './actions';
-import passwordResetReducer, { resetState } from './slice';
-
-const initialState = {
-  isLoading: false,
-  error: null,
-  resetRequestSuccess: false,
-  resetConfirmSuccess: false,
-  message: null,
-};
+import passwordResetReducer, { initialState, resetState } from './slice';
 
 const testEmail = 'enofergetest@yandex.ru';
 

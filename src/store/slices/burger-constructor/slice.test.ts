@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 
 import burgerConstructorReducer, {
+  initialState,
   setBun,
   addIngredient,
   removeIngredient,
@@ -38,11 +39,6 @@ const mockMain: TIngredient = {
   image_large: '',
   image_mobile: '',
   __v: 0,
-};
-
-const initialState = {
-  bun: null,
-  ingredients: [],
 };
 
 describe('burgerConstructor slice', () => {

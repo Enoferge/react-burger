@@ -13,19 +13,7 @@ import {
   logoutThunk,
   editUserProfileThunk,
 } from './actions';
-import authReducer, { resetAuthState, clearAuth } from './slice';
-
-const initialAuthState = {
-  user: null,
-  accessToken: null,
-  refreshToken: null,
-  isLoading: false,
-  error: null,
-  authSuccess: false,
-  isAuthChecked: false,
-  isEditInProgress: false,
-  editError: null,
-};
+import authReducer, { initialState, resetAuthState, clearAuth } from './slice';
 
 describe('auth slice', () => {
   beforeEach(() => {
@@ -33,12 +21,12 @@ describe('auth slice', () => {
   });
 
   it('should return the initial state', () => {
-    expect(authReducer(undefined, { type: '' })).toEqual(initialAuthState);
+    expect(authReducer(undefined, { type: '' })).toEqual(initialState);
   });
 
   it('should handle resetAuthState', () => {
     const stateWithError = {
-      ...initialAuthState,
+      ...initialState,
       authSuccess: true,
       error: 'some error',
     };
@@ -51,21 +39,21 @@ describe('auth slice', () => {
 
   it('should handle clearAuth', () => {
     const stateWithUser = {
-      ...initialAuthState,
+      ...initialState,
       user: { email: 'a@a.ru', name: 'A' },
       accessToken: 'at',
       refreshToken: 'rt',
       authSuccess: true,
       error: 'err',
     };
-    expect(authReducer(stateWithUser, clearAuth())).toEqual(initialAuthState);
+    expect(authReducer(stateWithUser, clearAuth())).toEqual(initialState);
   });
 
   it('should handle setIsAuthChecked', () => {
     expect(
       authReducer(undefined, { type: 'auth/setIsAuthChecked', payload: true })
     ).toEqual({
-      ...initialAuthState,
+      ...initialState,
       isAuthChecked: true,
     });
   });
@@ -96,7 +84,7 @@ describe('auth slice', () => {
         })
       );
       expect(next).toEqual({
-        ...initialAuthState,
+        ...initialState,
         isLoading: false,
         authSuccess: true,
         user: payload.user,
@@ -143,7 +131,7 @@ describe('auth slice', () => {
         loginThunk.fulfilled(payload, 'reqId', { email: 'a@a.ru', password: '1' })
       );
       expect(next).toEqual({
-        ...initialAuthState,
+        ...initialState,
         isLoading: false,
         error: null,
         authSuccess: true,
@@ -169,7 +157,7 @@ describe('auth slice', () => {
 
   describe('refreshTokenThunk', () => {
     it('fulfilled', () => {
-      const state = { ...initialAuthState, accessToken: 'old', refreshToken: 'oldR' };
+      const state = { ...initialState, accessToken: 'old', refreshToken: 'oldR' };
       const payload = { accessToken: 'newAt', refreshToken: 'newRt' };
       const next = authReducer(
         state,
@@ -224,7 +212,7 @@ describe('auth slice', () => {
   describe('logoutThunk', () => {
     it('fulfilled clears auth', () => {
       const state = {
-        ...initialAuthState,
+        ...initialState,
         user: { email: 'a@a.ru', name: 'A' },
         accessToken: 'at',
         refreshToken: 'rt',
@@ -233,12 +221,12 @@ describe('auth slice', () => {
         state,
         logoutThunk.fulfilled(undefined, 'reqId', undefined)
       );
-      expect(next).toEqual(initialAuthState);
+      expect(next).toEqual(initialState);
     });
 
     it('rejected clears auth', () => {
       const state = {
-        ...initialAuthState,
+        ...initialState,
         user: { email: 'a@a.ru', name: 'A' },
         accessToken: 'at',
       };
@@ -246,7 +234,7 @@ describe('auth slice', () => {
         state,
         logoutThunk.rejected(new Error('err'), 'reqId', undefined)
       );
-      expect(next).toEqual(initialAuthState);
+      expect(next).toEqual(initialState);
     });
   });
 
