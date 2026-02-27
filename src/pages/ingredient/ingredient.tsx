@@ -13,7 +13,7 @@ export const Ingredient = (): React.JSX.Element => {
 
   if (isLoading) {
     return (
-      <PageLayout>
+      <PageLayout className={styles.pageWithTopPadding}>
         <div className={styles.wrapper}>
           <Loading message="Загрузка ингредиентов..." />
         </div>
@@ -23,7 +23,7 @@ export const Ingredient = (): React.JSX.Element => {
 
   if (!ingredient) {
     return (
-      <PageLayout>
+      <PageLayout className={styles.pageWithTopPadding}>
         <div className={styles.wrapper}>
           <p className="text text_type_main-default">Ингредиент не найден</p>
         </div>
@@ -32,7 +32,7 @@ export const Ingredient = (): React.JSX.Element => {
   }
 
   return (
-    <PageLayout>
+    <PageLayout className={styles.pageWithTopPadding}>
       <div className={styles.wrapper}>
         <h1 className={`${styles.title} text text_type_main-large mb-5`}>
           Детали ингредиента

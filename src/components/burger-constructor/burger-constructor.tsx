@@ -13,7 +13,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Modal } from '../modal/modal';
-import { OrderDetails } from '../order-details/order-details';
+import { NewOrder } from '../new-order/new-order';
 import { BurgerConstructorBunDropZone } from './burger-constructor-bun-drop-zone/burger-constructor-bun-drop-zone';
 import { BurgerConstructorIngredientsDropZone } from './burger-constructor-ingredients-drop-zone/burger-constructor-ingredients-drop-zone';
 
@@ -22,12 +22,12 @@ import styles from './burger-constructor.module.css';
 export const BurgerConstructor = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const { bun, ingredients } = useAppSelector((state) => state.burgerConstructor);
-  const [isOrderDetailsModalOpened, setIsOrderDetailsModalOpened] = useState(false);
+  const [isNewOrderModalOpened, setIsNewOrderModalOpened] = useState(false);
   const { user, isAuthChecked } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const { order, isCreating, createOrder } = useCreateOrder({
-    onCreationSuccess: () => setIsOrderDetailsModalOpened(true),
+    onCreationSuccess: () => setIsNewOrderModalOpened(true),
   });
 
   const totalPrice = useMemo(() => {
@@ -84,15 +84,15 @@ export const BurgerConstructor = (): React.JSX.Element => {
           </Button>
         )}
       </div>
-      {isOrderDetailsModalOpened && (
+      {isNewOrderModalOpened && (
         <Modal
           onClose={(): void => {
-            setIsOrderDetailsModalOpened(false);
+            setIsNewOrderModalOpened(false);
             dispatch(clearOrder());
             dispatch(clearConstructor());
           }}
         >
-          <OrderDetails order={order} />
+          <NewOrder order={order} />
         </Modal>
       )}
     </section>

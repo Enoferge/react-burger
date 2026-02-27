@@ -10,7 +10,7 @@ type TUseCreateOrderProps = {
   onCreationSuccess: () => void;
 };
 
-type TUseCreateOrderResult = TOrderSliceState & {
+type TUseCreateOrderResult = Pick<TOrderSliceState, 'order' | 'name' | 'isCreating'> & {
   createOrder: () => void;
 };
 
@@ -49,5 +49,10 @@ export const useCreateOrder = ({
     }
   }, [order?.number, isCreating, onCreationSuccess, dispatch]);
 
-  return { order, name, isCreating, createOrder };
+  return {
+    order,
+    name,
+    isCreating,
+    createOrder,
+  };
 };

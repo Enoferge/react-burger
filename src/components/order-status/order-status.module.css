@@ -1,0 +1,7 @@
+.statusColorSuccess {
+  color: var(--colors-interface-success);
+}
+
+.statusColorCancelled {
+  color: var(--colors-interface-error);
+}
